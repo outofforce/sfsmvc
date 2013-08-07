@@ -14,4 +14,8 @@ public class abcController {
 		return "hello";
 
 	}
+	@RequestMapping("/index")
+	public String index(){
+		return "/main/index";
+	}
 }
