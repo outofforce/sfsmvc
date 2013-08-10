@@ -6,7 +6,7 @@
 	<display-name>Spring MVC Application</display-name>
     <context-param>
         <param-name>contextConfigLocation</param-name>
-        <param-value>classpath:springjdbc.xml</param-value>
+        <param-value>classpath:application.xml,classpath:springjdbc.xml</param-value>
     </context-param>
     <listener>
         <listener-class>
@@ -21,7 +21,7 @@
 
 	<servlet-mapping>
 		<servlet-name>mvc-dispatcher</servlet-name>
-		<url-pattern>/</url-pattern>
+		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 
     <!-- 字符集过滤器 -->
