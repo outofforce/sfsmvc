@@ -56,12 +56,7 @@ public class WebUtil {
 		return mapList;
 	}
 	public static int getCount(String tableName){
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://outofforce.f3322.org:23/cat");
-		dataSource.setUsername("cat");
-		dataSource.setPassword("as1a1nf0");
-		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
+		JdbcTemplate jdbcTemplate=getJdbcTemp();
 		String sql=String.format("select count(*) from %s",tableName);
 		int i=jdbcTemplate.queryForInt(sql);
 		return i+1;
@@ -89,5 +84,14 @@ public class WebUtil {
 			//randBuffer[i] = numbersAndLetters[randGen.nextInt(35)];
 		}
 		return new String(randBuffer);
+	}
+	public static JdbcTemplate getJdbcTemp(){
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		dataSource.setUrl("jdbc:mysql://outofforce.f3322.org:23/cat");
+		dataSource.setUsername("cat");
+		dataSource.setPassword("as1a1nf0");
+		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
+		return  jdbcTemplate;
 	}
 }

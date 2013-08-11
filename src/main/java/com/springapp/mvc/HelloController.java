@@ -1,5 +1,9 @@
 package com.springapp.mvc;
 
+import bean.Dao.ActiveDao;
+import bean.Dao.RegisterDao;
+import bean.DaoImpl.ActiveDaoImpl;
+import bean.DaoImpl.RegisterDaoImpl;
 import bean.UserDao;
 import common.WebUtil;
 import frame.mail.MailSenderInfo;
@@ -72,18 +76,19 @@ public class HelloController {
 		String str=new String();
 		String userName=userDao.getUserName();
 		String passwd=userDao.getPasswd();
-		//创建新用户
-		System.out.println(userName+passwd);
-		int id=WebUtil.getCount("User");
-		Date date=new Date();
-		String sql="insert into User (id,user_name,passwd,create_time,status,chg_time,email) values (?,?,?,?,0,?,?)";
-		Object[] objects=new Object[]{id,userName,passwd,date,date,userName};
-		try{
-			jdbcTemplate.update(sql,objects);
-			str="success";
-		}catch (Exception e){
-			System.out.println("errorMessage="+e.getMessage());
+		RegisterDao dao= (RegisterDao) new RegisterDaoImpl();
+		String randomStr=dao.setRegister(userName,passwd);
+		if(randomStr.equals("error")){
 			str="error";
+		}else {
+			str="success";
+			//发送邮件通知用户激活
+			String content=String.format("http://localhost:8080/active.do?userName=%s&value=%s",userName,randomStr);
+			mailSenderInfo.setToAddress(new String[]{userName});
+			SimpleMailSender simpleMailSender=new SimpleMailSender();
+			mailSenderInfo.setContent(content);
+			mailSenderInfo.setSubject("请点击下面的链接激活您的账户");
+			simpleMailSender.sendTextMail(mailSenderInfo);
 		}
 		//返回结果
 		OutputStream out = response.getOutputStream();
@@ -93,20 +98,6 @@ public class HelloController {
 		out.write(bt);
 		out.close();
 		out.flush();
-		//设置激活随机码
-		String randomStr=WebUtil.randomString(10);
-		id=WebUtil.getCount("UserEvent");
-	    sql="insert into UserEvent values (?,?,?,?,?,?,?)";
-		objects=new Object[]{id,userName,0,randomStr,1,date,date};
-		jdbcTemplate.update(sql,objects);
-
-		//发送邮件通知用户激活
-		String content=String.format("http://localhost:8080/active.do?userName=%s&value=%s",userName,randomStr);
-		mailSenderInfo.setToAddress(new String[]{userName});
-		SimpleMailSender simpleMailSender=new SimpleMailSender();
-		mailSenderInfo.setContent(content);
-		mailSenderInfo.setSubject("请点击下面的链接激活您的账户");
-		simpleMailSender.sendTextMail(mailSenderInfo);
 	}
 
 	/**
@@ -150,18 +141,8 @@ public class HelloController {
 	public String active(HttpServletRequest request,HttpServletResponse response){
 		String userName=(String)request.getParameter("userName");
 		String value=(String)request.getParameter("value");
-		String sql="update UserEvent set status = 0 where user_id = ? and event_value = ?";
-		Object[] objects=new Object[] {userName,value};
-		try{
-			jdbcTemplate.update(sql,objects);
-			sql="update User set status = 1 where user_name = ? ";
-			jdbcTemplate.update(sql,new Object[] {userName});
-			return "/main/active";
-		} catch (Exception e){
-			System.out.println(e.getMessage());
-			return "/main/error";
-		}
-
+		ActiveDao activeDao=(ActiveDao)new ActiveDaoImpl();
+		return activeDao.active(userName,value);
 	}
 	@RequestMapping("/bulletin")
 	public void bulletin(HttpServletRequest request,HttpServletResponse response){

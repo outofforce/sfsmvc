@@ -128,7 +128,7 @@
 <script src="../../bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
     function  mapJpg(){
-                    var url="<%=request.getContextPath()%>/login.do";
+                    var url="<%=request.getContextPath()%>/active.do";
                     var command="userName=linyiming85@hotmail.com&passwd=123456";
                     $.ajax({
                         url:url,
