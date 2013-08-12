@@ -74,13 +74,12 @@ public class WebUtil {
 		}
 		if (randGen == null) {
 			randGen = new Random();
-			numbersAndLetters = ("0123456789abcdefghijklmnopqrstuvwxyz" +
-					"0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
+			numbersAndLetters = ("0123456789").toCharArray();
 			//numbersAndLetters = ("0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZ").toCharArray();
 		}
 		char [] randBuffer = new char[length];
 		for (int i=0; i<randBuffer.length; i++) {
-			randBuffer[i] = numbersAndLetters[randGen.nextInt(71)];
+			randBuffer[i] = numbersAndLetters[randGen.nextInt(9)];
 			//randBuffer[i] = numbersAndLetters[randGen.nextInt(35)];
 		}
 		return new String(randBuffer);

@@ -1,5 +1,7 @@
 package bean;
 
+import org.springframework.stereotype.Repository;
+
 import java.util.Date;
 
 /**
@@ -9,13 +11,34 @@ import java.util.Date;
  * Time: 上午10:08
  * To change this template use File | Settings | File Templates.
  */
-public class PublishDao {
+
+public class Publish {
 	private int userId;
 	private String context;
 	private String gisInfo;
 	private String contextImg;
 	private Date createTime;
 	private int status;
+	private int id;
+	private String userName;
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+
 
 	public String getContext() {
 		return context;

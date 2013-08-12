@@ -22,7 +22,7 @@ public class RegisterDaoImpl implements RegisterDao {
 		JdbcTemplate jdbcTemplate=WebUtil.getJdbcTemp();
 		int id= WebUtil.getCount("User");
 		//设置激活随机码
-		String randomStr=WebUtil.randomString(10);
+		String randomStr=WebUtil.randomString(6);
 		Date date=new Date();
 		String sql="insert into User (id,user_name,passwd,create_time,status,chg_time,email) values (?,?,?,?,0,?,?)";
 		Object[] objects=new Object[]{id,userName,passwd,date,date,userName};

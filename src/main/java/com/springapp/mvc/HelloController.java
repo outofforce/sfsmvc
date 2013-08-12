@@ -3,12 +3,18 @@ package com.springapp.mvc;
 import bean.Dao.ActiveDao;
 import bean.Dao.RegisterDao;
 import bean.DaoImpl.ActiveDaoImpl;
+import bean.DaoImpl.PublishDao;
 import bean.DaoImpl.RegisterDaoImpl;
+import bean.Publish;
 import bean.UserDao;
+import common.JsonPluginsUtil;
 import common.WebUtil;
 import frame.mail.MailSenderInfo;
 import frame.mail.SimpleMailSender;
+import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.http.HttpRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -23,12 +29,14 @@ import sun.awt.AWTCharset;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.beans.Encoder;
-import java.io.IOException;
-import java.io.OutputStream;
+import java.io.*;
+import java.net.URL;
+import java.net.URLConnection;
 import java.net.URLDecoder;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Date;
+import java.util.List;
 import java.util.Random;
 
 @Controller
@@ -50,15 +58,30 @@ public class HelloController {
 	}
 
 	@RequestMapping("/test")
-	public  String test(HttpRequest request,HttpServletResponse response) throws IOException {
-		System.out.println("1");
-		OutputStream out = response.getOutputStream();
-		String str="{return {sa ss} {11 44}}";
-		byte[] bt=str.getBytes();
+	public  String test(HttpServletRequest request,HttpServletResponse response) throws IOException {
+		String urlStr = "http://api.map.baidu.com/geocoder?address=牡丹江路营业厅&output=json&key=6eea93095ae93db2c77be9ac910ff311&city=上海市";
+		URL url = new URL(urlStr);
+		URLConnection con = url.openConnection();
+		con.setDoOutput(true);
+		con.setRequestProperty("Pragma:", "no-cache");
+		con.setRequestProperty("Cache-Control", "no-cache");
+		con.setRequestProperty("Content-Type", "text/html");
+
+		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
+		String line = "";
+		StringBuffer buf = new StringBuffer();
+		while ( (line = br.readLine()) != null ) {
+			buf.append(line);
+		}
+		String
+		result = buf.toString();
+
+		OutputStream out1 = response.getOutputStream();
+		byte[] bt=result.getBytes();
 		response.setContentLength(bt.length);
-		out.write(bt);
-		out.close();
-		out.flush();
+		out1.write(bt);
+		out1.close();
+		out1.flush();
 		return null;
 	}
 
@@ -71,11 +94,11 @@ public class HelloController {
 	@RequestMapping("/register")
 	public void resister(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		//获取用户名和密码
-		System.out.println();
 		UserDao userDao=(UserDao) WebUtil.getBean(request,UserDao.class);
 		String str=new String();
 		String userName=userDao.getUserName();
 		String passwd=userDao.getPasswd();
+		System.out.println("username===="+userName+"\rpasswd===="+passwd);
 		RegisterDao dao= (RegisterDao) new RegisterDaoImpl();
 		String randomStr=dao.setRegister(userName,passwd);
 		if(randomStr.equals("error")){
@@ -83,7 +106,7 @@ public class HelloController {
 		}else {
 			str="success";
 			//发送邮件通知用户激活
-			String content=String.format("http://localhost:8080/active.do?userName=%s&value=%s",userName,randomStr);
+			String content=String.format("请在手机端输入以下数字来激活您的账号：%s",randomStr);
 			mailSenderInfo.setToAddress(new String[]{userName});
 			SimpleMailSender simpleMailSender=new SimpleMailSender();
 			mailSenderInfo.setContent(content);
@@ -98,6 +121,7 @@ public class HelloController {
 		out.write(bt);
 		out.close();
 		out.flush();
+		System.out.println(str);
 	}
 
 	/**
@@ -135,17 +159,33 @@ public class HelloController {
 		out.write(bt);
 		out.close();
 		out.flush();
+		System.out.println(str);
 	}
 
 	@RequestMapping("/active")
-	public String active(HttpServletRequest request,HttpServletResponse response){
+	public String active(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		String userName=(String)request.getParameter("userName");
 		String value=(String)request.getParameter("value");
 		ActiveDao activeDao=(ActiveDao)new ActiveDaoImpl();
-		return activeDao.active(userName,value);
+		String str= activeDao.active(userName,value);
+		//返回结果
+		OutputStream out = response.getOutputStream();
+		byte[] bt=str.getBytes();
+		response.setContentLength(bt.length);
+		response.setCharacterEncoding("UTF-8");
+		out.write(bt);
+		out.close();
+		out.flush();
+		return null;
 	}
-	@RequestMapping("/bulletin")
+	@RequestMapping("/queryPubdata")
 	public void bulletin(HttpServletRequest request,HttpServletResponse response){
+		ApplicationContext context=new ClassPathXmlApplicationContext("classpath:application.xml");
+		String userName=(String)request.getParameter("userName");
+		PublishDao publishDao=(PublishDao)context.getBean("publishDao");
+		List<Publish> publishList=publishDao.getPublishList();
+		String str= JsonPluginsUtil.beanListToJson(publishList);
+		System.out.println(str);
 
 	}
 

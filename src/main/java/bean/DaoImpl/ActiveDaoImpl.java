@@ -21,10 +21,10 @@ public class ActiveDaoImpl implements ActiveDao{
 			jdbcTemplate.update(sql,objects);
 			sql="update User set status = 1 where user_name = ? ";
 			jdbcTemplate.update(sql,new Object[] {userName});
-			return "/main/active";
+			return "success";
 		} catch (Exception e){
 			System.out.println(e.getMessage());
-			return "/main/error";
+			return "error";
 		}
 	}
 }
