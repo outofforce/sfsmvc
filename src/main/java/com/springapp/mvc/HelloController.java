@@ -114,13 +114,7 @@ public class HelloController {
 			simpleMailSender.sendTextMail(mailSenderInfo);
 		}
 		//返回结果
-		OutputStream out = response.getOutputStream();
-		byte[] bt=str.getBytes();
-		response.setContentLength(bt.length);
-		response.setCharacterEncoding("UTF-8");
-		out.write(bt);
-		out.close();
-		out.flush();
+		WebUtil.setResponse(response,str);
 		System.out.println(str);
 	}
 
@@ -152,13 +146,7 @@ public class HelloController {
 			    str="nouser";
 		}
 		//返回结果
-		OutputStream out = response.getOutputStream();
-		byte[] bt=str.getBytes();
-		response.setContentLength(bt.length);
-		response.setCharacterEncoding("UTF-8");
-		out.write(bt);
-		out.close();
-		out.flush();
+		WebUtil.setResponse(response,str);
 		System.out.println(str);
 	}
 
@@ -169,24 +157,21 @@ public class HelloController {
 		ActiveDao activeDao=(ActiveDao)new ActiveDaoImpl();
 		String str= activeDao.active(userName,value);
 		//返回结果
-		OutputStream out = response.getOutputStream();
-		byte[] bt=str.getBytes();
-		response.setContentLength(bt.length);
-		response.setCharacterEncoding("UTF-8");
-		out.write(bt);
-		out.close();
-		out.flush();
+		WebUtil.setResponse(response,str);
 		return null;
 	}
+
 	@RequestMapping("/queryPubdata")
-	public void bulletin(HttpServletRequest request,HttpServletResponse response){
+	public void bulletin(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		ApplicationContext context=new ClassPathXmlApplicationContext("classpath:application.xml");
 		String userName=(String)request.getParameter("userName");
-		PublishDao publishDao=(PublishDao)context.getBean("publishDao");
+		PublishDao publishDao=new PublishDao();
 		List<Publish> publishList=publishDao.getPublishList();
 		String str= JsonPluginsUtil.beanListToJson(publishList);
 		System.out.println(str);
-
+		str=String.format("success%s",str);
+		//返回结果
+		WebUtil.setResponse(response,str);
 	}
 
 

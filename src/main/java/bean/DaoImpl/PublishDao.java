@@ -11,6 +11,8 @@ import javax.annotation.PostConstruct;
 import javax.sql.DataSource;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.List;
 
 /**
@@ -24,7 +26,7 @@ import java.util.List;
 public class PublishDao {
 	public DriverManagerDataSource dataSource;
 	private PublishQuery publishQuery;
-
+	SimpleDateFormat format = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
 	@PostConstruct
 	public void init(){
 		this.dataSource = new DriverManagerDataSource();
@@ -51,7 +53,9 @@ public class PublishDao {
 			Publish publish=new Publish();
 			publish.setContext(rs.getString("context"));
 			publish.setContextImg(rs.getString("context_img"));
-			publish.setCreateTime(rs.getTime("create_time"));
+
+			publish.setCreateTime(format.format(rs.getTime("create_time")));
+			System.out.println("createTime=="+format.format(rs.getTime("create_time")));
 			publish.setGisInfo(rs.getString("gis_info"));
 			publish.setId(rs.getInt("id"));
 			publish.setStatus(rs.getInt("status"));

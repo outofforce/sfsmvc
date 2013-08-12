@@ -6,6 +6,9 @@ import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
+import java.io.IOException;
+import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.util.Enumeration;
 import java.util.Random;
@@ -92,5 +95,16 @@ public class WebUtil {
 		dataSource.setPassword("as1a1nf0");
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		return  jdbcTemplate;
+	}
+
+	public static void setResponse(HttpServletResponse response,String str) throws IOException {
+		//返回结果
+		OutputStream out = response.getOutputStream();
+		byte[] bt=str.getBytes();
+		response.setContentLength(bt.length);
+		response.setCharacterEncoding("UTF-8");
+		out.write(bt);
+		out.close();
+		out.flush();
 	}
 }

@@ -14,10 +14,19 @@ import java.util.Date;
 
 public class Publish {
 	private int userId;
+
+	public String getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
+	}
+
 	private String context;
 	private String gisInfo;
 	private String contextImg;
-	private Date createTime;
+	private String createTime;
 	private int status;
 	private int id;
 	private String userName;
@@ -64,13 +73,6 @@ public class Publish {
 		this.contextImg = contextImg;
 	}
 
-	public Date getCreateTime() {
-		return createTime;
-	}
-
-	public void setCreateTime(Date createTime) {
-		this.createTime = createTime;
-	}
 
 	public int getStatus() {
 		return status;
