@@ -53,7 +53,6 @@ public class PublishDao {
 			Publish publish=new Publish();
 			publish.setContext(rs.getString("context"));
 			publish.setContextImg(rs.getString("context_img"));
-
 			publish.setCreateTime(format.format(rs.getTime("create_time")));
 			System.out.println("createTime=="+format.format(rs.getTime("create_time")));
 			publish.setGisInfo(rs.getString("gis_info"));
