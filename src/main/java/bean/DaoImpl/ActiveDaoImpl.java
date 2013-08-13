@@ -15,9 +15,9 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Transactional
 public class ActiveDaoImpl implements ActiveDao{
+	public static JdbcTemplate jdbcTemplate= WebUtil.getJdbcTemp();
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public String active(String userName, String value) {
-		JdbcTemplate jdbcTemplate= WebUtil.getJdbcTemp();
 		String sql="update UserEvent set status = 0 where user_id = ? and event_value = ?";
 		Object[] objects=new Object[] {userName,value};
 		try{

@@ -7,6 +7,7 @@ import bean.DaoImpl.PublishDao;
 import bean.DaoImpl.RegisterDaoImpl;
 import bean.Publish;
 import bean.UserDao;
+import common.BASE64;
 import common.JsonPluginsUtil;
 import common.WebUtil;
 import frame.mail.MailSenderInfo;
@@ -24,6 +25,7 @@ import org.springframework.ui.ModelMap;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import sun.awt.AWTCharset;
 
 import javax.servlet.http.HttpServletRequest;
@@ -92,7 +94,7 @@ public class HelloController {
 	 * @throws IOException
 	 */
 	@RequestMapping("/register")
-	public void resister(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public void resister(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		//获取用户名和密码
 		UserDao userDao=(UserDao) WebUtil.getBean(request,UserDao.class);
 		String str=new String();
@@ -114,7 +116,7 @@ public class HelloController {
 			simpleMailSender.sendTextMail(mailSenderInfo);
 		}
 		//返回结果
-		WebUtil.setResponse(response,str);
+		WebUtil.setResponse(response, BASE64.encryptBASE64(str.getBytes("UTF-8")));
 		System.out.println(str);
 	}
 
@@ -125,7 +127,7 @@ public class HelloController {
 	 * @throws IOException
 	 */
 	@RequestMapping("/login")
-	public void login(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public void login(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		//获取用户名和密码
 		System.out.println();
 		UserDao userDao=(UserDao) WebUtil.getBean(request,UserDao.class);
@@ -146,33 +148,39 @@ public class HelloController {
 			    str="nouser";
 		}
 		//返回结果
-		WebUtil.setResponse(response,str);
+		WebUtil.setResponse(response, BASE64.encryptBASE64(str.getBytes("UTF-8")));
 		System.out.println(str);
 	}
 
 	@RequestMapping("/active")
-	public String active(HttpServletRequest request,HttpServletResponse response) throws IOException {
+	public String active(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String userName=(String)request.getParameter("userName");
 		String value=(String)request.getParameter("value");
 		ActiveDao activeDao=(ActiveDao)new ActiveDaoImpl();
 		String str= activeDao.active(userName,value);
 		//返回结果
-		WebUtil.setResponse(response,str);
+		WebUtil.setResponse(response,BASE64.encryptBASE64(str.getBytes("UTF-8")));
 		return null;
 	}
 
 	@RequestMapping("/queryPubdata")
-	public void bulletin(HttpServletRequest request,HttpServletResponse response) throws IOException {
-		ApplicationContext context=new ClassPathXmlApplicationContext("classpath:application.xml");
+	public void bulletin(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		String userName=(String)request.getParameter("userName");
 		PublishDao publishDao=new PublishDao();
 		List<Publish> publishList=publishDao.getPublishList();
 		String str= JsonPluginsUtil.beanListToJson(publishList);
-		System.out.println(str);
-		str=String.format("success%s",str);
+		str= BASE64.encryptBASE64(String.format("success%s",str).getBytes("UTF-8"));
 		//返回结果
 		WebUtil.setResponse(response,str);
 	}
 
+	@RequestMapping("/youHaveMessage")
+	public void youHaveMessage(@RequestParam("publishId")String publishId, HttpServletRequest request,HttpServletResponse response ) throws Exception {
+		String sql="select count(*) from Publish where id > ?";
+		Object[] objects=new Object[] {publishId};
+		int i=jdbcTemplate.queryForInt(sql,objects);
+		String str=BASE64.encryptBASE64(String.format("success%s",Integer.toString(i)).getBytes("UTF-8"));
+		WebUtil.setResponse(response,str);
 
+	}
 }

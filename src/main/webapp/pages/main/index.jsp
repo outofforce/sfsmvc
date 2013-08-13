@@ -66,64 +66,152 @@
 <head>
     <title>招聘单位信息录入</title>
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <style>
+        body {
+            padding-top: 60px; /* 60px to make the container go all the way to the bottom of the topbar */
+        }
+            /* Wrapper for page content to push down footer */
+        #wrap {
+            min-height: 100%;
+            height: auto !important;
+            height: 100%;
+            /* Negative indent footer by it's height */
+            margin: 0 auto -60px;
+        }
+
+            /* Set the fixed height of the footer here */
+        #push,
+        #footer {
+            height: 60px;
+        }
+        #footer {
+            background-color: #f5f5f5;
+        }
+
+            /* Lastly, apply responsive CSS fixes as necessary */
+        @media (max-width: 767px) {
+            #footer {
+                margin-left: -20px;
+                margin-right: -20px;
+                padding-left: 20px;
+                padding-right: 20px;
+            }
+        }
+
+
+
+            /* Custom page CSS
+            -------------------------------------------------- */
+            /* Not required for template or sticky footer method. */
+
+        .container {
+            width: auto;
+            max-width: 680px;
+        }
+        .container .credit {
+            margin: 20px 0;
+        }
+    </style>
     <!-- Bootstrap -->
     <link href="../../bootstrap/style/bootstrap.min.css" rel="stylesheet" media="screen">
 </head>
 <body>
-<div style="text-align:center">
-    <h1 style="text-align: center">请录入招聘单位信息</h1>
-    <table class="table table-bordered" style="width: 70%;text-align: center;margin: auto" >
-        <tr>
-            <td style="text-align: center" >
-                单位名称
-            </td  >
-            <td style="text-align: left" >
-                <input type="text">
-            </td  >
-        </tr>
-        <tr>
-            <td style="text-align: center" >
-                单位地址
-            </td >
-            <td style="text-align: left" >
-                <input type="text">     <input type="button" class="btn-primary" value="搜索" onclick="return mapJpg();">
-            </td >
-        </tr>
-        <tr style="display: none;" id="displayTr">
-            <td colspan="2" style="text-align: center">
-                <div id="map" style="width:500px;height:320px"></div>
-            </td>
-        </tr>
-        <tr>
-            <td style="text-align: center" >
-                招聘岗位
-            </td >
-            <td style="text-align: left" >
-                <input type="text">
-            </td  >
-        </tr>
-        <tr>
-            <td style="text-align: center" >
-                招聘人数
-            </td >
-            <td style="text-align: left" >
-                <input type="text">
-            </td  >
-        </tr>
-
-        <tr>
-            <td style="text-align: center" >
-                公司简介
-            </td  >
-            <td style="text-align: left">
-                <textarea></textarea>
-            </td >
-        </tr>
-    </table>
-
-    <input type="button" class="btn-primary" value="确定" style="margin-top: 40px">
+<div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar-inner">
+        <div class="container">
+            <button type="button" class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+            <a class="brand" href="#">就业信息管理系统</a>
+            <div class="nav-collapse collapse">
+                <ul class="nav">
+                    <li class="active"><a href="#">单位信息</a></li>
+                    <li><a href="#about">招聘信息</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div><!--/.nav-collapse -->
+        </div>
+    </div>
 </div>
 
+<div id="wrap">
+    <div class="container">
+            <h1 style="text-align: center">请录入招聘单位信息</h1>
+            <table class="table table-bordered" style="width: 70%;text-align: center;margin: auto" >
+                <tr>
+                    <td style="text-align: center" >
+                        单位名称
+                    </td  >
+                    <td style="text-align: left" >
+                        <div class="input-append">
+                            <input class="span4" id="appendedInputButtons" type="text">
+                            <button class="btn" type="button">查询</button>
+                        </div>
+                    </td  >
+                </tr>
+                <tr>
+                    <td style="text-align: center" >
+                        单位地址
+                    </td >
+                    <td style="text-align: left" >
+                        <input type="text" class="span2" placeholder="工作地点">
+                        <input type="text" class="span3" placeholder="地址">
+                    </td >
+                </tr>
+                <tr style="display: none;" id="displayTr">
+                    <td colspan="2" style="text-align: center">
+                        <div id="map" style="width:500px;height:320px"></div>
+                    </td>
+                </tr>
+                <tr>
+                    <td style="text-align: center" >
+                        招聘岗位
+                    </td >
+                    <td style="text-align: left" >
+                        <input type="text" class=span5>
+                    </td  >
+                </tr>
+                <tr>
+                    <td style="text-align: center" >
+                        招聘人数
+                    </td >
+                    <td style="text-align: left" >
+                        <input type="text" class=span5>
+                    </td  >
+                </tr>
+                <tr>
+                    <td style="text-align: center" >
+                        岗位要求
+                    </td  >
+                    <td style="text-align: left">
+                        <textarea rows=10 class="span5"></textarea>
+                    </td >
+                </tr>
+                <tr>
+                    <td style="text-align: center" >
+                        公司简介
+                    </td  >
+                    <td style="text-align: left">
+                        <textarea rows=10 class="span5"></textarea>
+                    </td >
+                </tr>
+            </table>
+            <div style="text-align: center">
+                <input type="button" class="btn-primary"  value="确定" style="margin-top: 40px;text-align: center">
+            </div>
+
+    </div>
+
+<div id="push"></div>
+</div>
+
+<div id="footer">
+    <div class="container">
+        <p class="muted credit">Example courtesy <a href="http://martinbean.co.uk">Martin Bean</a> and <a href="http://ryanfait.com/sticky-footer/">Ryan Fait</a>.</p>
+    </div>
+</div>
 <script src="../../bootstrap/js/jquery.js"></script>
 <script src="../../bootstrap/js/bootstrap.min.js"></script>
 <script type="text/javascript">
