@@ -3,6 +3,7 @@ package bean.Dao;
 import bean.CompanyInfo;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,5 +14,5 @@ import java.util.List;
  */
 public interface CompanyInfoDao {
 	public void setCompanyInfo(CompanyInfo companyInfo);
-	public List<String> getCompanyName();
+	public List<Map<String,Object>> getCompanyName();
 }

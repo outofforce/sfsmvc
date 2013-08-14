@@ -26,10 +26,30 @@ public class Publish {
 	private String context;
 	private String gisInfo;
 	private String contextImg;
+
+
 	private String createTime;
 	private int status;
 	private int id;
 	private String userName;
+	private int publishType;
+	private String baseCode;
+
+	public String getBaseCode() {
+		return baseCode;
+	}
+
+	public void setBaseCode(String baseCode) {
+		this.baseCode = baseCode;
+	}
+
+	public int getPublishType() {
+		return publishType;
+	}
+
+	public void setPublishType(int publishType) {
+		this.publishType = publishType;
+	}
 
 	public int getId() {
 		return id;

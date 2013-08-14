@@ -127,8 +127,8 @@
             <a class="brand" href="#">就业信息管理系统</a>
             <div class="nav-collapse collapse">
                 <ul class="nav">
-                    <li><a onclick="javascript:showTab('tab1')">单位信息</a></li>
-                    <li><a onclick="javascript:showTab('tab2')">招聘信息</a></li>
+                    <li><a onclick="javascript:showTab('tab1',this)">单位信息</a></li>
+                    <li><a onclick="javascript:showTab('tab2',this)">招聘信息</a></li>
                     <li><a href="#contact">Contact</a></li>
                 </ul>
             </div><!--/.nav-collapse -->
@@ -159,7 +159,7 @@
 <script src="<%=request.getContextPath()%>/bootstrap/js/jquery.form.js"></script>
 <script type="text/javascript">
 
-    function showTab(tab){
+    function showTab(tab,obj){
         $(".showTable").each(function(){
            if($(this).attr("id")==tab){
                $(this).show();
@@ -167,6 +167,7 @@
                $(this).hide();
            }
         });
+        $(obj).attr("class","active");
     }
     function ajaxSub(formId){
         var options={success:showResponse};
@@ -242,6 +243,15 @@
             }
         }
         return xml;
+    }
+
+    function CompNameChg(input){
+        var comp= $("#compNameVaule").val().split(",");
+        for(var i=0;i<comp.length;i++){
+            if($(input).val()==comp[i].split("|")[0]){
+                $("#companyId").val(comp[i].split("|")[1]);
+            }
+        }
     }
 </script>
 </body>

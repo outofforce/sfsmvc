@@ -7,6 +7,7 @@ import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,7 +28,9 @@ public class CompanyInfoDaoImpl implements CompanyInfoDao{
 	}
 
 	@Override
-	public List<String> getCompanyName() {
-		return null;  //To change body of implemented methods use File | Settings | File Templates.
+	public List<Map<String,Object>> getCompanyName() {
+		String sql="select company_code,company_name from CompanyInfo where status = 1";
+		List<Map<String,Object>> list=jdbcTemplate.queryForList(sql);
+		return list;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 }

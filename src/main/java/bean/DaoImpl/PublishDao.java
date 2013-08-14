@@ -1,6 +1,7 @@
 package bean.DaoImpl;
 
 import bean.Publish;
+import common.WebUtil;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
 import org.springframework.stereotype.Repository;
@@ -11,6 +12,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -51,11 +53,22 @@ public class PublishDao {
 			publish.setContext(rs.getString("context"));
 			publish.setContextImg(rs.getString("context_img"));
 			publish.setCreateTime(format.format(rs.getTime("create_time")));
-			System.out.println("createTime=="+format.format(rs.getTime("create_time")));
+			System.out.println("createTime==" + format.format(rs.getTime("create_time")));
 			publish.setGisInfo(rs.getString("gis_info"));
 			publish.setId(rs.getInt("id"));
 			publish.setStatus(rs.getInt("status"));
 			publish.setUserId(rs.getInt("user_id"));
+			publish.setPublishType(rs.getInt("publish_type"));
+			if(1==publish.getPublishType()){
+				String sql="select a.id,a.company_name,b.base_code from CompanyInfo a"
+				+",RecruitInfo b where a.company_code = b.company_id and a.company_code = ?";
+				Object[] objects=new Object[] {rs.getString("external_id")};
+				List list= WebUtil.getJdbcTemp().queryForList(sql,objects);
+				Map map= (Map) list.get(0);
+				publish.setBaseCode((String) map.get("base_code"));
+				publish.setUserId((Integer) map.get("id"));
+				publish.setUserName((String)map.get("company_name"));
+			}
 			return publish;
 		}
 	}

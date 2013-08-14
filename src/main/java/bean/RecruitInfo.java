@@ -12,6 +12,24 @@ public class RecruitInfo extends BaseBean {
 	public String baseCode;
 	public String jobDesc;
 	public String companyId;
+	public String compAddr;
+	public String position;
+
+	public String getPosition() {
+		return position;
+	}
+
+	public void setPosition(String position) {
+		this.position = position;
+	}
+
+	public String getCompAddr() {
+		return compAddr;
+	}
+
+	public void setCompAddr(String compAddr) {
+		this.compAddr = compAddr;
+	}
 
 	public String getRecruitNum() {
 		return recruitNum;

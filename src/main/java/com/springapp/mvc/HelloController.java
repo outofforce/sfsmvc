@@ -12,34 +12,18 @@ import common.JsonPluginsUtil;
 import common.WebUtil;
 import frame.mail.MailSenderInfo;
 import frame.mail.SimpleMailSender;
-import net.sf.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-import org.springframework.http.HttpRequest;
 import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.core.RowMapper;
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
-import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
-import sun.awt.AWTCharset;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.beans.Encoder;
-import java.io.*;
-import java.net.URL;
-import java.net.URLConnection;
-import java.net.URLDecoder;
-import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.util.Date;
+import java.io.IOException;
 import java.util.List;
-import java.util.Random;
 
 @Controller
 @RequestMapping("/")
@@ -57,34 +41,6 @@ public class HelloController {
         model.addAttribute("message", "Hello world!");
 
 		return "hello";
-	}
-
-	@RequestMapping("/test")
-	public  String test(HttpServletRequest request,HttpServletResponse response) throws IOException {
-		String urlStr = "http://api.map.baidu.com/geocoder?address=牡丹江路营业厅&output=json&key=6eea93095ae93db2c77be9ac910ff311&city=上海市";
-		URL url = new URL(urlStr);
-		URLConnection con = url.openConnection();
-		con.setDoOutput(true);
-		con.setRequestProperty("Pragma:", "no-cache");
-		con.setRequestProperty("Cache-Control", "no-cache");
-		con.setRequestProperty("Content-Type", "text/html");
-
-		BufferedReader br = new BufferedReader(new InputStreamReader(con.getInputStream()));
-		String line = "";
-		StringBuffer buf = new StringBuffer();
-		while ( (line = br.readLine()) != null ) {
-			buf.append(line);
-		}
-		String
-		result = buf.toString();
-
-		OutputStream out1 = response.getOutputStream();
-		byte[] bt=result.getBytes();
-		response.setContentLength(bt.length);
-		out1.write(bt);
-		out1.close();
-		out1.flush();
-		return null;
 	}
 
 	/**

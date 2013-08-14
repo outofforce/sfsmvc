@@ -1,5 +1,7 @@
 package com.springapp.mvc;
 
+import bean.Dao.CompanyInfoDao;
+import bean.DaoImpl.CompanyInfoDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
@@ -8,8 +10,10 @@ import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 
+import javax.servlet.http.HttpServletRequest;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.List;
 
 @Controller
 @RequestMapping("/abc")
@@ -34,8 +38,12 @@ public class abcController {
 
 	}
 	@RequestMapping("/index")
-	public String index(){
-
+	public String index(HttpServletRequest request){
+		CompanyInfoDao companyInfoDao=new CompanyInfoDaoImpl();
+		List list=companyInfoDao.getCompanyName();
+		System.out.println(list);
+		request.setAttribute("ComInfoList",list);
 		return "/main/index";
 	}
+
 }

@@ -1,3 +1,5 @@
+<%@ page import="java.util.List" %>
+<%@ page import="java.util.Map" %>
 <%--
   Created by IntelliJ IDEA.
   User: linyiming
@@ -13,13 +15,35 @@
 <body>
 <h1 style="text-align: center">请录入招聘信息</h1>
 <form id="recruitInfoForm" action="<%=request.getContextPath()%>/insertRecruitInfo.do" method="post" >
+<input type="hidden" id="compNameVaule" value="<%List<Map> ComInfoList=(List)request.getAttribute("ComInfoList");
+              for(int i=0;i<ComInfoList.size();i++){
+                Map map=ComInfoList.get(i);
+                if(i<(ComInfoList.size()-1)) {
+            %><%=map.get("company_name")%>|<%=map.get("company_code")%>,<%
+} else{%><%=map.get("company_name")%>|<%=map.get("company_code")%><%
+        }}
+%>">
 <table class="table table-bordered" style="width: 70%;text-align: center;margin: auto" >
     <tr>
         <td style="text-align: center" >
             单位名称
         </td  >
         <td style="text-align: left" >
-             <input class="span5" id="companyId" type="text" name="companyId">
+             <input class="span5" id="companyName" type="text" name="companyName" data-source='[<%
+              for(int i=0;i<ComInfoList.size();i++){
+                Map map=ComInfoList.get(i);
+                if(i<(ComInfoList.size()-1)) {
+            %>"<%=map.get("company_name")%>",<%
+              } else{%>"<%=map.get("company_name")%>"<%
+              }}
+            %>]' data-items="4" data-provide="typeahead" style="margin: 0 auto;" onchange="javascript:CompNameChg(this)">
+        </td  >
+    <tr>
+        <td style="text-align: center" >
+            单位编码
+        </td  >
+        <td style="text-align: left" >
+            <input class="span5" id="companyId" type="text" name="companyId">
         </td  >
     </tr>
     <tr>
@@ -28,7 +52,7 @@
         </td >
         <td style="text-align: left" >
             <input type="text" class="span2" placeholder="工作地点" id="baseCode" name="baseCode">
-            <input type="text" class="span3" placeholder="地址">
+            <input type="text" class="span3" placeholder="地址" id="compAddr" name="compAddr" >
         </td >
     </tr>
     <tr style="display: none;" id="displayTr">

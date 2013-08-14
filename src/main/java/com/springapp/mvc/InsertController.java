@@ -15,6 +15,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.sql.SQLException;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,10 +27,10 @@ import java.sql.SQLException;
 @Controller
 @RequestMapping("/")
 public class InsertController {
+	public static CompanyInfoDao companyInfoDao=new CompanyInfoDaoImpl();
 	@RequestMapping("/insertCompanyInfo")
 	public void insertCompanyInfo(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		CompanyInfo companyInfo= (CompanyInfo) WebUtil.getBean(request, CompanyInfo.class);
-		CompanyInfoDao companyInfoDao=new CompanyInfoDaoImpl();
 		String str;
 		try{
 			companyInfoDao.setCompanyInfo(companyInfo);
@@ -43,7 +44,6 @@ public class InsertController {
 	@RequestMapping("/insertRecruitInfo")
 	public void insertRecruitInfo(HttpServletRequest request,HttpServletResponse response) throws IOException {
 		RecruitInfo recruitInfo=(RecruitInfo)WebUtil.getBean(request,RecruitInfo.class);
-		System.out.println("Recruit");
 		RecruitInfoDao recruitInfoDao=new RecruitInfoDaoImpl();
 		String str;
 		try{
@@ -55,5 +55,13 @@ public class InsertController {
 			System.out.println(e.getMessage());
 			WebUtil.setResponse(response,e.getMessage());
 		}
+	}
+
+	@RequestMapping("/queryCompInfo")
+	public List queryCompInfo(HttpServletRequest request,HttpServletResponse response){
+		List list=companyInfoDao.getCompanyName();
+		System.out.println(list);
+		request.setAttribute("ComInfoList",list);
+		return null;
 	}
 }
