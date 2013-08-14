@@ -35,6 +35,7 @@ public class abcController {
 	}
 	@RequestMapping("/index")
 	public String index(){
+
 		return "/main/index";
 	}
 }
