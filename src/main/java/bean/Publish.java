@@ -11,8 +11,9 @@ import java.util.Date;
  * Time: 上午10:08
  * To change this template use File | Settings | File Templates.
  */
-
+//测试分支
 public class Publish {
+
 	private int userId;
 
 	public String getCreateTime() {
