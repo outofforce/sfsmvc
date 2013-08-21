@@ -1,8 +1,8 @@
 package bean.DaoImpl;
 
 import bean.Dao.RecruitInfoDao;
-import bean.Publish;
-import bean.RecruitInfo;
+import bean.bean.Publish;
+import bean.bean.RecruitInfo;
 import common.WebUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;

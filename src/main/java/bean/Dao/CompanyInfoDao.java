@@ -1,6 +1,6 @@
 package bean.Dao;
 
-import bean.CompanyInfo;
+import bean.bean.CompanyInfo;
 
 import java.util.List;
 import java.util.Map;

@@ -1,6 +1,6 @@
 package bean.DaoImpl;
 
-import bean.CompanyInfo;
+import bean.bean.CompanyInfo;
 import bean.Dao.CompanyInfoDao;
 import common.WebUtil;
 import org.springframework.jdbc.core.JdbcTemplate;

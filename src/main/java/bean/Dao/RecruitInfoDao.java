@@ -1,6 +1,6 @@
 package bean.Dao;
 
-import bean.RecruitInfo;
+import bean.bean.RecruitInfo;
 
 /**
  * Created with IntelliJ IDEA.

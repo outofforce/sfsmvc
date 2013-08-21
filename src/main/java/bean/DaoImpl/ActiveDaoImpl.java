@@ -18,8 +18,13 @@ public class ActiveDaoImpl implements ActiveDao{
 	public static JdbcTemplate jdbcTemplate= WebUtil.getJdbcTemp();
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public String active(String userName, String value) {
-		String sql="update UserEvent set status = 0 where user_id = ? and event_value = ?";
+		String sql="select count(*) from UserEvent where user_id = ? and event_value=?";
 		Object[] objects=new Object[] {userName,value};
+		int count=jdbcTemplate.queryForInt(sql,objects);
+		if(count==0){
+			return "error";
+		}
+		sql="update UserEvent set status = 0 where user_id = ? and event_value = ?";
 		try{
 			jdbcTemplate.update(sql,objects);
 			sql="update User set status = 1 where user_name = ? ";

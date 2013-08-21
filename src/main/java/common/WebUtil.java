@@ -1,6 +1,8 @@
 package common;
 
 
+import frame.mail.MailSenderInfo;
+import frame.mail.SimpleMailSender;
 import org.apache.commons.beanutils.BeanUtils;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
@@ -90,7 +92,7 @@ public class WebUtil {
 	public static JdbcTemplate getJdbcTemp(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://outofforce.f3322.org:23/cat");
+		dataSource.setUrl("jdbc:mysql://outofforce.f3322.org:23/MTL");
 		dataSource.setUsername("cat");
 		dataSource.setPassword("as1a1nf0");
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
@@ -106,5 +108,18 @@ public class WebUtil {
 		out.write(bt);
 		out.close();
 		out.flush();
+	}
+
+	public static void sendMail(MailSenderInfo mailSenderInfo,String userName,String content){
+		mailSenderInfo.setToAddress(new String[]{userName});
+		SimpleMailSender simpleMailSender=new SimpleMailSender();
+		mailSenderInfo.setContent(content);
+		mailSenderInfo.setSubject("请点击下面的链接激活您的账户");
+		simpleMailSender.sendTextMail(mailSenderInfo);
+	}
+
+	public static void commInsert(Class clazz) throws IllegalAccessException, InstantiationException {
+		 Object obj=clazz.newInstance();
+
 	}
 }

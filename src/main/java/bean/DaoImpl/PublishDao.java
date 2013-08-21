@@ -1,6 +1,6 @@
 package bean.DaoImpl;
 
-import bean.Publish;
+import bean.bean.Publish;
 import common.WebUtil;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.jdbc.object.MappingSqlQuery;
@@ -30,9 +30,9 @@ public class PublishDao {
 	public void init(){
 		this.dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://outofforce.f3322.org:23/cat");
+		dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/MTL");
 		dataSource.setUsername("cat");
-		dataSource.setPassword("as1a1nf0");
+		dataSource.setPassword("aopen7291");
 		this.publishQuery=new PublishQuery(dataSource);
 	}
 	public List<Publish> getPublishList(){
@@ -43,7 +43,7 @@ public class PublishDao {
 
 	public class PublishQuery extends MappingSqlQuery<Publish>{
 		public PublishQuery(DataSource ds){
-			super(ds,"select * from Publish order by id desc ") ;
+			super(ds,"select * from UserPublish order by id desc ") ;
 			compile();
 		}
 
@@ -53,7 +53,7 @@ public class PublishDao {
 			publish.setContext(rs.getString("context"));
 			publish.setContextImg(rs.getString("context_img"));
 			publish.setCreateTime(format.format(rs.getTime("create_time")));
-			System.out.println("createTime==" + format.format(rs.getTime("create_time")));
+			System.out.println("createTime==" + format.format (rs.getTime("create_time")));
 			publish.setGisInfo(rs.getString("gis_info"));
 			publish.setId(rs.getInt("id"));
 			publish.setStatus(rs.getInt("status"));

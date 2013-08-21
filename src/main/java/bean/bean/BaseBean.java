@@ -1,4 +1,4 @@
-package bean;
+package bean.bean;
 
 import java.util.Date;
 
@@ -13,6 +13,16 @@ public class BaseBean {
 	public int id;
 	public Date activeTime;
 	public int status;
+
+	public Date getCreateTime() {
+		return createTime;
+	}
+
+	public void setCreateTime(Date createTime) {
+		this.createTime = createTime;
+	}
+
+	public Date createTime;
 
 	public int getId() {
 		return id;

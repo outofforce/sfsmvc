@@ -1,5 +1,7 @@
 package bean.Dao;
 
+import bean.bean.UserDao;
+
 /**
  * Created with IntelliJ IDEA.
  * User: linyiming
@@ -8,5 +10,5 @@ package bean.Dao;
  * To change this template use File | Settings | File Templates.
  */
 public interface RegisterDao {
-	public String setRegister(String userName,String passwd);
+	public String setRegister(UserDao userDao);
 }

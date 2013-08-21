@@ -1,4 +1,4 @@
-package bean;
+package bean.bean;
 
 import java.util.Date;
 
@@ -18,6 +18,15 @@ public class UserDao {
 	private Date createTime;
 	private Date chgTime;
 	private String passwd;
+	private String nick_name;
+
+	public String getNick_name() {
+		return nick_name;
+	}
+
+	public void setNick_name(String nike_name) {
+		this.nick_name = nike_name;
+	}
 
 	public String getUserName() {
 		return userName;

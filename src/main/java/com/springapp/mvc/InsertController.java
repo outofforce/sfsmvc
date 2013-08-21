@@ -1,12 +1,12 @@
 package com.springapp.mvc;
 
 
-import bean.CompanyInfo;
+import bean.bean.CompanyInfo;
 import bean.Dao.CompanyInfoDao;
 import bean.Dao.RecruitInfoDao;
 import bean.DaoImpl.CompanyInfoDaoImpl;
 import bean.DaoImpl.RecruitInfoDaoImpl;
-import bean.RecruitInfo;
+import bean.bean.RecruitInfo;
 import common.WebUtil;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +14,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.sql.SQLException;
 import java.util.List;
 
 /**
