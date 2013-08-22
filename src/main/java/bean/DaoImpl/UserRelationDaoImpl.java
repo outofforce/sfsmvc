@@ -1,10 +1,12 @@
 package bean.DaoImpl;
 
 import bean.Dao.UserRelationDao;
+import bean.bean.UserDao;
 import common.WebUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 
 import java.util.Date;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -53,6 +55,15 @@ public class UserRelationDaoImpl implements UserRelationDao{
 		}catch (Exception e){
 			return "error";
 		}
+	}
+
+	@Override
+	public List<UserDao>  queryUser(String userName, int num) {
+		num=num*20;
+		String sql="select * from User where nick_name like ? limit ?,20";
+		Object[] objects=new Object[] {userName,num};
+	    List list=jdbcTemplate.queryForList(sql,objects);
+		return list;  //To change body of implemented methods use File | Settings | File Templates.
 	}
 
 }

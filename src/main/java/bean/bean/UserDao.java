@@ -18,14 +18,14 @@ public class UserDao {
 	private Date createTime;
 	private Date chgTime;
 	private String passwd;
-	private String nick_name;
+	private String nickName;
 
-	public String getNick_name() {
-		return nick_name;
+	public String getNickName() {
+		return nickName;
 	}
 
-	public void setNick_name(String nike_name) {
-		this.nick_name = nike_name;
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
 	}
 
 	public String getUserName() {

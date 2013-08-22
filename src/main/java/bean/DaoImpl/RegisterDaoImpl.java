@@ -28,12 +28,12 @@ public class RegisterDaoImpl implements RegisterDao {
 			Date date=new Date();
 			String queries="user_name,passwd,create_time,status,chg_time,email,nick_name,head_img";
 			String whereClause="?,?,?,0,?,?,?,?";
-			Object[] objects=new Object[]{userDao.getUserName(),userDao.getPasswd(),date,date,userDao.getUserName(),userDao.getNick_name(),userDao.getHeadImg()};
+			Object[] objects=new Object[]{userDao.getUserName(),userDao.getPasswd(),date,date,userDao.getUserName(),userDao.getNickName(),userDao.getHeadImg()};
 
 			if(userDao.getHeadImg()==null){
 				queries="user_name,passwd,create_time,status,chg_time,email,nick_name";
 				whereClause= "?,?,?,0,?,?,?";
-				objects=new Object[]{userDao.getUserName(),userDao.getPasswd(),date,date,userDao.getUserName(),userDao.getNick_name()};
+				objects=new Object[]{userDao.getUserName(),userDao.getPasswd(),date,date,userDao.getUserName(),userDao.getNickName()};
 
 			}
 			//设置激活随机码
@@ -41,10 +41,14 @@ public class RegisterDaoImpl implements RegisterDao {
 			String sql=String.format("insert into User (%s) values (%s)",queries,whereClause);
 			try{
 				jdbcTemplate.update(sql,objects);
+
+				sql="select id from User where user_name = ?";
+				objects=new Object[] {userDao.getUserName()};
+				int id=jdbcTemplate.queryForInt(sql,objects);
 				sql="insert into UserEvent (user_id,event_type,event_value,status,create_time,chg_time) values (?,?,?,?,?,?)";
-				objects=new Object[]{userDao.getUserName(),0,randomStr,1,date,date};
+				objects=new Object[]{id,0,randomStr,1,date,date};
 				jdbcTemplate.update(sql,objects);
-				return randomStr;
+				return (randomStr+","+id);
 			}catch (Exception e){
 				return "error";
 			}

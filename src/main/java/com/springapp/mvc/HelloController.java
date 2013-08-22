@@ -59,7 +59,6 @@ public class HelloController {
 		String str=new String();
 		String userName=userDao.getUserName();
 		String passwd=userDao.getPasswd();
-		System.out.println("username===="+userName+"\rpasswd===="+passwd);
 		RegisterDao dao= (RegisterDao) new RegisterDaoImpl();
 		String randomStr=dao.setRegister(userDao);
 		if(randomStr.equals("error")){
@@ -69,6 +68,10 @@ public class HelloController {
 			WebUtil.setResponse(response, BASE64.encryptBASE64(str.getBytes("UTF-8")));
 		}else {
 			str="success";
+			String[] strings=randomStr.split(",");
+			randomStr=strings[0];
+			String userId=strings[1];
+			str+=userId;
 			//发送邮件通知用户激活
 			String content=String.format("请在手机端输入以下数字来激活您的账号：%s",randomStr);
 			WebUtil.sendMail(mailSenderInfo,userName,content);
@@ -116,15 +119,15 @@ public class HelloController {
 			if(1== status[0]){
 				if(flag!=null&&flag.equals("1")){
 					if("".equals(nickNameImg[0])||nickNameImg[0]==null){
-					    nickNameImg[0]="''";
+					    nickNameImg[0]="";
 					}
 					if("".equals(nickNameImg[1])||nickNameImg[1]==null){
-						nickNameImg[1]="''";
+						nickNameImg[1]="";
 					}
 					if("".equals(nickNameImg[2])||nickNameImg[2]==null){
 						nickNameImg[2]="";
 					}
-					str=String.format("success{'nick_name'=%s,'head_img'=%s,'user_id'='%s'}",nickNameImg[0],nickNameImg[1],nickNameImg[2]);
+					str=String.format("success{'nick_name'='%s','head_img'='%s','user_id'='%s'}",nickNameImg[0],nickNameImg[1],nickNameImg[2]);
 				}else {
 					str="success";
 				}
@@ -141,8 +144,9 @@ public class HelloController {
 
 	@RequestMapping("/active")
 	public String active(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String userName=(String)request.getParameter("userName");
+		String userName=(String)request.getParameter("userId");
 		String value=(String)request.getParameter("value");
+		System.out.println("userName="+userName+"\nvalue="+value);
 		ActiveDao activeDao=(ActiveDao)new ActiveDaoImpl();
 		String str= activeDao.active(userName,value);
 		//返回结果
@@ -255,6 +259,10 @@ public class HelloController {
 
 	@RequestMapping("/queryUser")
 	public void queryUser(HttpServletRequest request,HttpServletResponse response){
-
+		  String userName=(String)request.getParameter("userName");
+		  String num=(String)request.getParameter("num");
+	      UserRelationDao userRelationDao=new UserRelationDaoImpl();
+		List list=userRelationDao.queryUser(userName,Integer.parseInt(num));
+		System.out.println(list);
 	}
 }

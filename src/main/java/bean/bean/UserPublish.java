@@ -15,6 +15,24 @@ public class UserPublish extends BaseBean{
 	private String gisInfo;
 	private String ttl_type;
 	private String create_time;
+	private String userName;
+	private String nickName;
+
+	public String getUserName() {
+		return userName;
+	}
+
+	public void setUserName(String userName) {
+		this.userName = userName;
+	}
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
 
 	public String getCreate_time() {
 		return create_time;

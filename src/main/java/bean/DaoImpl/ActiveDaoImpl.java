@@ -27,7 +27,7 @@ public class ActiveDaoImpl implements ActiveDao{
 		sql="update UserEvent set status = 0 where user_id = ? and event_value = ?";
 		try{
 			jdbcTemplate.update(sql,objects);
-			sql="update User set status = 1 where user_name = ? ";
+			sql="update User set status = 1 where id = ? ";
 			jdbcTemplate.update(sql,new Object[] {userName});
 			return "success";
 		} catch (Exception e){

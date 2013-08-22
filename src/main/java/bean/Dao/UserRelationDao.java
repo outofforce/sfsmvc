@@ -1,5 +1,9 @@
 package bean.Dao;
 
+import bean.bean.UserDao;
+
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: linyiming
@@ -10,4 +14,6 @@ package bean.Dao;
 public interface UserRelationDao {
 	public String watchSomeOne(String watcher,String beWatcher);
 	public String unWatchSomeOne(String watcher,String beWatcher);
+	public List<UserDao>queryUser(String userName,int num);
+
 }

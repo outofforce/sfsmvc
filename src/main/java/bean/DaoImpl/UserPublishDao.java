@@ -39,9 +39,9 @@ public class UserPublishDao {
 
 	public class PublishQuery extends MappingSqlQuery<UserPublish> {
 		public PublishQuery(DataSource ds){
-			super(ds,"select * from (select * from UserPublish where inactive_time is null \n" +
+			super(ds,"select * from (select a.*,b.user_name,b.nick_name from UserPublish a,User b where a.user_id = b.id and a.inactive_time is null \n" +
 					"UNION\n" +
-					"select * from UserPublish where inactive_time > SYSDATE()) a order by create_time desc;") ;
+					"select a.*,b.user_name,b.nick_name from UserPublish a,User b where a.user_id = b.id and a.inactive_time > SYSDATE()) c order by c.create_time desc;") ;
 			compile();
 		}
 
@@ -57,6 +57,8 @@ public class UserPublishDao {
 			publish.setStatus(rs.getInt("status"));
 			publish.setUserId(Integer.toString(rs.getInt("user_id")));
 			publish.setSimpleImg(rs.getString("simple_img"));
+			publish.setUserName(rs.getString("user_name"));
+			publish.setNickName(rs.getString("nick_name"));
 			return publish;
 		}
 	}

@@ -15,6 +15,24 @@ public class UserRelation extends BaseBean{
 	private String relaUserId;
 	private String chgTime;
 	private Date inactiveTime;
+	private String nickName;
+	private int count;
+
+	public String getNickName() {
+		return nickName;
+	}
+
+	public void setNickName(String nickName) {
+		this.nickName = nickName;
+	}
+
+	public int getCount() {
+		return count;
+	}
+
+	public void setCount(int count) {
+		this.count = count;
+	}
 
 	public String getUserId() {
 		return userId;

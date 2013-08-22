@@ -92,9 +92,9 @@ public class WebUtil {
 	public static JdbcTemplate getJdbcTemp(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://outofforce.f3322.org:23/MTL");
+		dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/mtldb");
 		dataSource.setUsername("cat");
-		dataSource.setPassword("as1a1nf0");
+		dataSource.setPassword("aopen7291");
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		return  jdbcTemplate;
 	}

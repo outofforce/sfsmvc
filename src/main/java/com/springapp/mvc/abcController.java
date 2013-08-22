@@ -1,8 +1,11 @@
 package com.springapp.mvc;
 
 import bean.Dao.CompanyInfoDao;
+import bean.Dao.TestUserDao;
 import bean.DaoImpl.CompanyInfoDaoImpl;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
@@ -21,6 +24,10 @@ public class abcController {
 
 	@RequestMapping("/o")
 	public String printWelcome(ModelMap model) {
+		ApplicationContext context=new ClassPathXmlApplicationContext("springjdbc.xml");
+		TestUserDao testUserDao=(TestUserDao)context.getBean("testUserDao");
+		System.out.println(testUserDao.getUserNum()+"  getUserNmu");
+
 		model.addAttribute("message", "Hello world!");
 		return "hello";
 
