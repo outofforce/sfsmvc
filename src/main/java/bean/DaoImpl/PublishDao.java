@@ -30,7 +30,7 @@ public class PublishDao {
 	public void init(){
 		this.dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/MTL");
+		dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/mtldb");
 		dataSource.setUsername("cat");
 		dataSource.setPassword("aopen7291");
 		this.publishQuery=new PublishQuery(dataSource);
@@ -52,8 +52,8 @@ public class PublishDao {
 			Publish publish=new Publish();
 			publish.setContext(rs.getString("context"));
 			publish.setContextImg(rs.getString("context_img"));
-			publish.setCreateTime(format.format(rs.getTime("create_time")));
-			System.out.println("createTime==" + format.format (rs.getTime("create_time")));
+			publish.setCreateTime(format.format(rs.getDate("create_time")));
+			System.out.println("createTime==" + format.format (rs.getDate("create_time")));
 			publish.setGisInfo(rs.getString("gis_info"));
 			publish.setId(rs.getInt("id"));
 			publish.setStatus(rs.getInt("status"));

@@ -9,7 +9,9 @@ import org.springframework.jdbc.datasource.DriverManagerDataSource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.io.OutputStream;
 import java.net.URLDecoder;
 import java.util.Enumeration;
@@ -23,8 +25,19 @@ import java.util.Random;
  * To change this template use File | Settings | File Templates.
  */
 public class WebUtil {
+	public static DriverManagerDataSource getDataSource(){
+		DriverManagerDataSource dataSource = new DriverManagerDataSource();
+		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
+		// dataSource.setUrl("jdbc:mysql://localhost:3306/mtldb");
+		dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/mtldb");
+		dataSource.setUsername("cat");
+		dataSource.setPassword("aopen7291");
+		return dataSource;
+	}
+
+
 	public static Object getBean(HttpServletRequest request,
-								 Class clazz) {
+								 Class clazz) throws IOException {
 		return getBean(request, clazz, false);
 	}
 	/**
@@ -33,7 +46,7 @@ public class WebUtil {
 	 * @return Gets a Object List
 	 */
 	public static Object getBean(HttpServletRequest request,
-								 Class clazz, boolean setAttr) {
+								 Class clazz, boolean setAttr) throws IOException {
 		HashMapList mapList = getMapList(request);
 
 		Object obj = null;
@@ -48,11 +61,16 @@ public class WebUtil {
 		return obj;
 	}
 
-	private static HashMapList getMapList(HttpServletRequest request) {
+	private static HashMapList getMapList(HttpServletRequest request) throws IOException {
 		// Iterator of parameter names
+
+//		String[] strings=result.split("&");
+//		for(String s:strings){
+//			String[] strs=s.split("=");
+//			mapList.put(strs[0],new String[]{strs[1]});
+//		}
 		Enumeration names = request.getParameterNames();
 		HashMapList mapList = new HashMapList();
-
 		while (names.hasMoreElements()) {
 			String name = (String) names.nextElement();
 			mapList.put(name, request.getParameterValues(name));
@@ -90,11 +108,7 @@ public class WebUtil {
 		return new String(randBuffer);
 	}
 	public static JdbcTemplate getJdbcTemp(){
-		DriverManagerDataSource dataSource = new DriverManagerDataSource();
-		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/mtldb");
-		dataSource.setUsername("cat");
-		dataSource.setPassword("aopen7291");
+		DriverManagerDataSource dataSource=getDataSource();
 		JdbcTemplate jdbcTemplate=new JdbcTemplate(dataSource);
 		return  jdbcTemplate;
 	}

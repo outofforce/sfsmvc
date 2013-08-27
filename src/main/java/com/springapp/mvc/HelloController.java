@@ -1,16 +1,18 @@
 package com.springapp.mvc;
 
-import bean.Dao.ActiveDao;
-import bean.Dao.RegisterDao;
-import bean.Dao.UserRelationDao;
+import bean.Dao.*;
 import bean.DaoImpl.*;
 import bean.bean.UserDao;
 import bean.bean.UserPublish;
+import bean.bean.WatcherInfo;
 import common.BASE64;
 import common.JsonPluginsUtil;
 import common.WebUtil;
 import frame.mail.MailSenderInfo;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.http.HttpEntity;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.core.RowMapper;
 import org.springframework.stereotype.Controller;
@@ -21,7 +23,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import java.io.BufferedReader;
 import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.UnsupportedEncodingException;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.Calendar;
@@ -89,6 +94,8 @@ public class HelloController {
 	 */
 	@RequestMapping("/login")
 	public void login(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		System.out.println("UserName="+request.getParameter("userName"));
+		System.out.println("passwd="+request.getParameter("passwd"));
 		//获取用户名和密码
 		UserDao userDao=(UserDao) WebUtil.getBean(request,UserDao.class);
 		String flag=(String)request.getParameter("flag");
@@ -144,11 +151,11 @@ public class HelloController {
 
 	@RequestMapping("/active")
 	public String active(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String userName=(String)request.getParameter("userId");
+		String userId=(String)request.getParameter("userId");
 		String value=(String)request.getParameter("value");
-		System.out.println("userName="+userName+"\nvalue="+value);
+		System.out.println("userId="+userId+"\nvalue="+value);
 		ActiveDao activeDao=(ActiveDao)new ActiveDaoImpl();
-		String str= activeDao.active(userName,value);
+		String str= activeDao.active(userId,value);
 		//返回结果
 		WebUtil.setResponse(response,BASE64.encryptBASE64(str.getBytes("UTF-8")));
 		return null;
@@ -156,9 +163,12 @@ public class HelloController {
 
 	@RequestMapping("/queryPubdata")
 	public void bulletin(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String userName=(String)request.getParameter("userName");
+		String userId=(String)request.getParameter("userId");
 		UserPublishDao publishDao=new UserPublishDao();
-		List<UserPublish> publishList=publishDao.getPublishList();
+		//List<UserPublish> publishList=publishDao.getPublishList();
+		ApplicationContext context=new ClassPathXmlApplicationContext("springjdbc.xml");
+		QueryMsgDao dao=(QueryMsgDao)context.getBean("queryMsgDao");
+		List publishList=dao.getMsgList(userId);
 		String str= JsonPluginsUtil.beanListToJson(publishList);
 		str= BASE64.encryptBASE64(String.format("success%s",str).getBytes("UTF-8"));
 		//返回结果
@@ -167,7 +177,7 @@ public class HelloController {
 
 	@RequestMapping("/youHaveMessage")
 	public void youHaveMessage(@RequestParam("publishId")String publishId, HttpServletRequest request,HttpServletResponse response ) throws Exception {
-		String sql="select count(*) from Publish where id > ?";
+		String sql="select count(*) from UserPublish where id > ?";
 		Object[] objects=new Object[] {publishId};
 		int i=jdbcTemplate.queryForInt(sql,objects);
 		String str=BASE64.encryptBASE64(String.format("success%s",Integer.toString(i)).getBytes("UTF-8"));
@@ -178,7 +188,9 @@ public class HelloController {
 	@RequestMapping("/postPubData")
 	public  void postPbuData(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		UserPublish userPublish= (UserPublish) WebUtil.getBean(request, UserPublish.class);
-		boolean b=insertToUserPublish(userPublish);
+		System.out.println(userPublish.getPostContext());
+		UserMsgDao dao=new UserMsgDaoImpl();
+		boolean b=dao.insertToUserPublish(userPublish);
 		if(b){
 			WebUtil.setResponse(response,BASE64.encryptBASE64("success".getBytes()));
 		}else {
@@ -186,58 +198,7 @@ public class HelloController {
 		}
 	}
 
-	private boolean insertToUserPublish(UserPublish publish){
-		String query="user_id,create_time,chg_time,status";
-		String val=publish.getUserId()+"&"+"newDate"+"&newDate&1";
-		String whereClause = "";
-		Date inactiveDate=new Date();
-		if(!"".equals(publish.getPostImg())&&publish.getPostImg()!=null){
-			query+=",context_img";
-			val+="&"+publish.getPostImg();
-		}
-		if(!"".equals(publish.getPostContext())&&publish.getPostContext()!=null){
-			query+=",context";
-			val+="&"+publish.getPostContext();
-		}
-		if(!"".equals(publish.getGisInfo())&&publish.getGisInfo()!=null){
-			query+=",gis_info";
-			val+="&"+publish.getGisInfo();
-		}
-		if(!"".equals(publish.getSimpleImg())&&publish.getSimpleImg()!=null){
-			query+=",simple_img";
-			val+="&"+publish.getSimpleImg();
-		}
-		if(!"".equals(publish.getTtl_type())&&publish.getTtl_type()!=null)  {
-			Calendar c=Calendar.getInstance();
-			c.setTime(new Date());
-			c.add(Calendar.HOUR_OF_DAY,Integer.parseInt(publish.getTtl_type()));
-			System.out.println(c.getTime());
-			query+=",inactive_time";
-			val+="&inActiVeDaTE";
-			inactiveDate=c.getTime();
-		}
 
-		String[] strs=val.split("&");
-		Object[] objects=new Object[strs.length];
-		for(int i=0;i<strs.length;i++){
-			if(strs[i].equals("newDate")){
-				objects[i]=new Date();
-			}else if(strs[i].equals("inActiVeDaTE")){
-				objects[i]=inactiveDate;
-			}else {
-				objects[i]=strs[i];
-			}
-			whereClause+=",?";
-		}
-		whereClause=whereClause.substring(1);
-		String sql="insert into UserPublish ("+query+") values ("+whereClause+")";
-		try{
-			jdbcTemplate.update(sql,objects);
-			return true;
-		}catch (Exception e){
-			return false;
-		}
-	}
 
 	@RequestMapping("/makeWatch")
 	public void makeWatch(HttpServletRequest request,HttpServletResponse response) throws Exception {
@@ -258,11 +219,27 @@ public class HelloController {
 	}
 
 	@RequestMapping("/queryUser")
-	public void queryUser(HttpServletRequest request,HttpServletResponse response){
-		  String userName=(String)request.getParameter("userName");
-		  String num=(String)request.getParameter("num");
-	      UserRelationDao userRelationDao=new UserRelationDaoImpl();
-		List list=userRelationDao.queryUser(userName,Integer.parseInt(num));
-		System.out.println(list);
+	public void queryUser(HttpServletRequest request,HttpServletResponse response) throws Exception {
+		String userName=(String)request.getParameter("userName");
+		String num=(String)request.getParameter("num");
+		String str=new String();
+		UserDao user=new UserDao();
+		user.setUserName(userName);
+		user.setNum(Integer.parseInt(num)*20);
+		ApplicationContext context=new ClassPathXmlApplicationContext("springjdbc.xml");
+	    UserRelationDao userRelationDao=(UserRelationDaoImpl)context.getBean("userRelationDao");
+		List<WatcherInfo> list=userRelationDao.queryUser(user);
+		if(list.size()>0){
+			str=JsonPluginsUtil.beanListToJson(list);
+		} else {
+			str="isNull";
+		}
+		str=String.format("success%s",str);
+		//返回结果
+		WebUtil.setResponse(response,BASE64.encryptBASE64(str.getBytes("UTF-8")));
+		for (WatcherInfo dao:list){
+			System.out.println(dao.getNickName());
+		}
+
 	}
 }

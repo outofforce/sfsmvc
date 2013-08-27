@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
+
+    <bean id="testuser" class="org.mybatis.spring.mapper.MapperFactoryBean"
+          p:mapperInterface="bean.Dao.TestUser"
+          p:sqlSessionFactory-ref="sqlSessionFactory"/>
+    <bean id="testUserDao" class="bean.DaoImpl.TestUserDaoImpl">
+        <property name="testUser" ref="testuser" />
+    </bean>
+    <bean id="queryMsg" class="org.mybatis.spring.mapper.MapperFactoryBean"
+          p:mapperInterface="bean.mybatisInterface.QueryMsg"
+          p:sqlSessionFactory-ref="sqlSessionFactory"/>
+    <bean id="queryMsgDao" class="bean.DaoImpl.QueryMsgDaoImpl">
+        <property name="queryMsg" ref="queryMsg"/>
+    </bean>
+
+    <bean id="userRelationInterface"  class="org.mybatis.spring.mapper.MapperFactoryBean"
+          p:mapperInterface="bean.mybatisInterface.UserRelationInterface"
+          p:sqlSessionFactory-ref="sqlSessionFactory"/>
+    <bean id="userRelationDao" class="bean.DaoImpl.UserRelationDaoImpl">
+        <property name="userRelationInterface" ref="userRelationInterface"></property>
+    </bean>
+
+</beans>

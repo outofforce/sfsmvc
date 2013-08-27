@@ -1,7 +1,8 @@
-package bean.Dao;
+package bean.mybatisInterface;
 
 import bean.bean.UserDao;
 import bean.bean.UserRelation;
+import bean.bean.WatcherInfo;
 
 import java.util.List;
 
@@ -13,5 +14,5 @@ import java.util.List;
  * To change this template use File | Settings | File Templates.
  */
 public interface UserRelationInterface {
-	public List<UserDao> getUserRelationList(UserRelation userRelation);
+	public List<WatcherInfo> getUserRelationList(UserDao user);
 }

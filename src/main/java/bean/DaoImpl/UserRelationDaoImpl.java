@@ -2,6 +2,9 @@ package bean.DaoImpl;
 
 import bean.Dao.UserRelationDao;
 import bean.bean.UserDao;
+import bean.bean.UserRelation;
+import bean.bean.WatcherInfo;
+import bean.mybatisInterface.UserRelationInterface;
 import common.WebUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 
@@ -17,6 +20,16 @@ import java.util.List;
  */
 public class UserRelationDaoImpl implements UserRelationDao{
 	public static JdbcTemplate jdbcTemplate= WebUtil.getJdbcTemp();
+	public UserRelationInterface userRelationInterface;
+
+	public UserRelationInterface getUserRelationInterface() {
+		return userRelationInterface;
+	}
+
+	public void setUserRelationInterface(UserRelationInterface userRelationInterface) {
+		this.userRelationInterface = userRelationInterface;
+	}
+
 	@Override
 	public String watchSomeOne(String watcher, String beWatcher) {
 		String sql="select count(*) from UserRelation where user_id = ? and rela_user_id = ?";
@@ -58,12 +71,9 @@ public class UserRelationDaoImpl implements UserRelationDao{
 	}
 
 	@Override
-	public List<UserDao>  queryUser(String userName, int num) {
-		num=num*20;
-		String sql="select * from User where nick_name like ? limit ?,20";
-		Object[] objects=new Object[] {userName,num};
-	    List list=jdbcTemplate.queryForList(sql,objects);
-		return list;  //To change body of implemented methods use File | Settings | File Templates.
+	public List<WatcherInfo>  queryUser(UserDao user) {
+		UserRelation userRelation=new UserRelation();
+		return this.getUserRelationInterface().getUserRelationList(user);
 	}
 
 }

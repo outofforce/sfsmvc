@@ -5,12 +5,5 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="mainInfo" class="frame.mail.MailSenderInfo"
-          p:mailServerHost="smtp.163.com"
-          p:mailServerPort="25"
-          p:validate="true"
-          p:userName="air141"
-          p:password="19850310"
-          p:fromAddress="air141@163.com"
-            />
+
 </beans>

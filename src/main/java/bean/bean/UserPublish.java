@@ -17,6 +17,15 @@ public class UserPublish extends BaseBean{
 	private String create_time;
 	private String userName;
 	private String nickName;
+	private String toGroup;
+
+	public String getToGroup() {
+		return toGroup;
+	}
+
+	public void setToGroup(String toGroup) {
+		this.toGroup = toGroup;
+	}
 
 	public String getUserName() {
 		return userName;

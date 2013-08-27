@@ -33,18 +33,13 @@
     <!-- 用注解来实现事务管理 -->
     <tx:annotation-driven transaction-manager="transactionManager"/>
 
+    <bean id="userMsgDao" class="bean.DaoImpl.UserMsgDaoImpl"/>
     <bean id="sqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean"
             p:dataSource-ref="dataSource"
             p:configLocation="classpath:mybatis.xml"
-            p:mapperLocations="classpath*:/sqlMap/TestUserMapper.xml"
+            p:mapperLocations="classpath*:/sqlMap/*Mapper.xml"
             />
-    <bean id="testuser" class="org.mybatis.spring.mapper.MapperFactoryBean"
-          p:mapperInterface="bean.Dao.TestUser"
-          p:sqlSessionFactory-ref="sqlSessionFactory"/>
-    <bean id="testUserDao" class="bean.DaoImpl.TestUserDaoImpl">
-        <property name="testUser" ref="testuser" />
-    </bean>
-
+    <import resource="mybatisDao.xml" />
     <bean id="mainInfo" class="frame.mail.MailSenderInfo"
           p:mailServerHost="smtp.163.com"
           p:mailServerPort="25"

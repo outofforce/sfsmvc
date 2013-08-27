@@ -1,0 +1,63 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+        <mapper namespace="bean.mybatisInterface.QueryMsg">
+    <select id="getMsg" resultType="bean.bean.UserPublish">
+
+         SELECT
+                *
+            FROM
+            <![CDATA[
+            (
+            ]]>
+
+                    SELECT
+                        a.context as postContext,
+                        a.context_img as postImg,
+                        a.gis_info as gisInfo,
+                        a.status as status,
+                        a.user_id as userId,
+                        a.simple_img as simpleImg,
+                        b.user_name as userName,
+                        b.nick_name as nickName,
+                        a.create_time
+                    FROM
+                        UserPublish a,
+                        USER b
+                    WHERE
+                        a.user_id = b.id
+                    AND a.inactive_time IS NULL
+                    OR a.inactive_time > SYSDATE()
+                    UNION
+                        SELECT
+                           a.context as postContext,
+                           a.context_img as postImg,
+                           a.gis_info as gisInfo,
+                           a.status as status,
+                           a.user_id as userId,
+                           a.simple_img as simpleImg,
+                           b.user_name as userName,
+                           b.nick_name as nickName,
+                           a.create_time
+                        FROM
+                            UserPublish a,
+                            USER b,
+                            UserMsgQueue d
+                        WHERE
+                            a.user_id = b.id
+                        AND
+                        <![CDATA[
+                        a.inactive_time > SYSDATE()
+                        ]]>
+                        OR
+                        a.inactive_time IS NULL
+                        AND
+                        a.id = d.publish_id
+
+                <![CDATA[
+                )
+                ]]> c
+            ORDER BY
+	c.create_time DESC
+
+    </select>
+</mapper>

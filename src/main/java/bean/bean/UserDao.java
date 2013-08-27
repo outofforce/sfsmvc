@@ -9,7 +9,7 @@ import java.util.Date;
  * Time: 上午10:30
  * To change this template use File | Settings | File Templates.
  */
-public class UserDao {
+public class UserDao extends BaseBean{
 	private String userName;
 	private String headImg;
 	private String email;
@@ -19,6 +19,16 @@ public class UserDao {
 	private Date chgTime;
 	private String passwd;
 	private String nickName;
+
+	public int getNum() {
+		return num;
+	}
+
+	public void setNum(int num) {
+		this.num = num;
+	}
+
+	private int num;  //用来分页
 
 	public String getNickName() {
 		return nickName;

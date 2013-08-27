@@ -13,7 +13,6 @@ public class UserRelation extends BaseBean{
 	private String  userId;
 	private String relationType;
 	private String relaUserId;
-	private String chgTime;
 	private Date inactiveTime;
 	private String nickName;
 	private int count;
@@ -56,14 +55,6 @@ public class UserRelation extends BaseBean{
 
 	public void setRelaUserId(String relaUserId) {
 		this.relaUserId = relaUserId;
-	}
-
-	public String getChgTime() {
-		return chgTime;
-	}
-
-	public void setChgTime(String chgTime) {
-		this.chgTime = chgTime;
 	}
 
 	public Date getInactiveTime() {

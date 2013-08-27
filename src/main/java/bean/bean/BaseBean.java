@@ -11,8 +11,16 @@ import java.util.Date;
  */
 public class BaseBean {
 	public int id;
-	public Date activeTime;
 	public int status;
+	public Date chgTime;
+
+	public Date getChgTime() {
+		return chgTime;
+	}
+
+	public void setChgTime(Date chgTime) {
+		this.chgTime = chgTime;
+	}
 
 	public Date getCreateTime() {
 		return createTime;
@@ -30,14 +38,6 @@ public class BaseBean {
 
 	public void setId(int id) {
 		this.id = id;
-	}
-
-	public Date getActiveTime() {
-		return activeTime;
-	}
-
-	public void setActiveTime(Date activeTime) {
-		this.activeTime = activeTime;
 	}
 
 	public int getStatus() {

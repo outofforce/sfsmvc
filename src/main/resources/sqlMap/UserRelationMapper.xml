@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
-        <mapper namespace="bean.Dao.UserRelationInterface">
+        <mapper namespace="bean.mybatisInterface.UserRelationInterface">
             <sql id="Select_clause">
                 SELECT
                   user_name as userName,
@@ -10,13 +10,13 @@
                   from User
             </sql>
 
-            <select id="getUserRelationList" parameterType="bean.bean.UserRelation" resultType="java.util.List">
+            <select id="getUserRelationList" parameterType="bean.bean.UserDao" resultType="bean.bean.WatcherInfo">
                   <include refid="Select_clause"/>
-                where
-                <if test="nickName!=null">
-                    nick_name like
-                    <![CDATA]
-                </if>
-
+                <where>
+                    <if test="userName!=null">
+                        nick_name like '%'||#{userName}||'%'
+                    </if>
+                </where>
+                  limit #{num},20
             </select>
     </mapper>
