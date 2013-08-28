@@ -32,7 +32,7 @@ public class UserRelationDaoImpl implements UserRelationDao{
 
 	@Override
 	public String watchSomeOne(String watcher, String beWatcher) {
-		String sql="select count(*) from UserRelation where user_id = ? and rela_user_id = ?";
+		String sql="select count(*) from UserRelation where user_id = ? and rela_user_id = ? and status = 1";
 		Object[] objects=new Object[] {watcher,beWatcher};
 		int count=jdbcTemplate.queryForInt(sql,objects);
 		if(count==0){
@@ -46,14 +46,8 @@ public class UserRelationDaoImpl implements UserRelationDao{
 				return "error";
 			}
 		}else {
-			sql="update UserRelation set status=1,chg_time = ? where user_id = ? and rela_user_id = ?";
-			objects=new Object[] {new Date(),watcher,beWatcher};
-			try{
-				jdbcTemplate.update(sql,objects);
-				return "success";
-			}catch (Exception e){
-				return "error";
-			}
+			return "error";
+
 		}
 
 	}
@@ -75,5 +69,11 @@ public class UserRelationDaoImpl implements UserRelationDao{
 		UserRelation userRelation=new UserRelation();
 		return this.getUserRelationInterface().getUserRelationList(user);
 	}
+
+	@Override
+	public List<WatcherInfo> queryWatcher(UserDao user) {
+		return this.getUserRelationInterface().getWatcherList(user);
+	}
+
 
 }

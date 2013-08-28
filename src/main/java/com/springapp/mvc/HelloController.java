@@ -100,49 +100,21 @@ public class HelloController {
 		UserDao userDao=(UserDao) WebUtil.getBean(request,UserDao.class);
 		String flag=(String)request.getParameter("flag");
 		String str=new String();
-		String userName=userDao.getUserName();
-		String passwd=userDao.getPasswd();
-		final String[] nickNameImg = new String[3];
-		final int[] status = {0};
-		//查询是否有此用户，用户是否已激活
-		String sql="select status,nick_name,head_img,id from User where user_name = ? and passwd = ?";
-		Object[] objects=new Object[] {userName,passwd};
-		jdbcTemplate.query(sql,objects,new RowMapper<Object>() {
-			@Override
-			public Object mapRow(ResultSet resultSet, int i) throws SQLException {
-
-				status[0] =resultSet.getInt("status");
-				if(resultSet.getString("nick_name")!=null)   {
-					nickNameImg[0] =resultSet.getString("nick_name");
+		ApplicationContext context=new ClassPathXmlApplicationContext("springjdbc.xml");
+		LoginDao dao=(LoginDaoImpl)context.getBean("loginDao");
+		List<UserDao> list=dao.getUserList(userDao);
+		//根据返回结果查看用户状态
+		if(list.size()>0){
+			for (UserDao user:list){
+				if(user.getStatus()==1){
+					System.out.println(user.getNickName()+"id"+user.getId()+"name"+user.getUserName());
+					str=String.format("success{'nick_name'='%s','head_img'='%s','user_id'='%s'}",user.getNickName(),user.getHeadImg(),user.getId());
+				} else {
+					str="inactive";
 				}
-				if(resultSet.getString("head_img")!=null){
-					nickNameImg[1]=resultSet.getString("head_img");
-				}
-				nickNameImg[2]= String.valueOf(resultSet.getInt("id"));
-				return null;  //To change body of implemented methods use File | Settings | File Templates.
 			}
-		});
-		try{
-			if(1== status[0]){
-				if(flag!=null&&flag.equals("1")){
-					if("".equals(nickNameImg[0])||nickNameImg[0]==null){
-					    nickNameImg[0]="";
-					}
-					if("".equals(nickNameImg[1])||nickNameImg[1]==null){
-						nickNameImg[1]="";
-					}
-					if("".equals(nickNameImg[2])||nickNameImg[2]==null){
-						nickNameImg[2]="";
-					}
-					str=String.format("success{'nick_name'='%s','head_img'='%s','user_id'='%s'}",nickNameImg[0],nickNameImg[1],nickNameImg[2]);
-				}else {
-					str="success";
-				}
-			}else if(0== status[0]){
-				str="inactive";
-			}
-		}catch (Exception e){
-			    str="nouser";
+		}   else {
+			str="nouser";
 		}
 		//返回结果
 		WebUtil.setResponse(response, BASE64.encryptBASE64(str.getBytes("UTF-8")));
@@ -161,85 +133,8 @@ public class HelloController {
 		return null;
 	}
 
-	@RequestMapping("/queryPubdata")
-	public void bulletin(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String userId=(String)request.getParameter("userId");
-		UserPublishDao publishDao=new UserPublishDao();
-		//List<UserPublish> publishList=publishDao.getPublishList();
-		ApplicationContext context=new ClassPathXmlApplicationContext("springjdbc.xml");
-		QueryMsgDao dao=(QueryMsgDao)context.getBean("queryMsgDao");
-		List publishList=dao.getMsgList(userId);
-		String str= JsonPluginsUtil.beanListToJson(publishList);
-		str= BASE64.encryptBASE64(String.format("success%s",str).getBytes("UTF-8"));
-		//返回结果
-		WebUtil.setResponse(response,str);
-	}
-
-	@RequestMapping("/youHaveMessage")
-	public void youHaveMessage(@RequestParam("publishId")String publishId, HttpServletRequest request,HttpServletResponse response ) throws Exception {
-		String sql="select count(*) from UserPublish where id > ?";
-		Object[] objects=new Object[] {publishId};
-		int i=jdbcTemplate.queryForInt(sql,objects);
-		String str=BASE64.encryptBASE64(String.format("success%s",Integer.toString(i)).getBytes("UTF-8"));
-		WebUtil.setResponse(response,str);
-
-	}
-
-	@RequestMapping("/postPubData")
-	public  void postPbuData(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		UserPublish userPublish= (UserPublish) WebUtil.getBean(request, UserPublish.class);
-		System.out.println(userPublish.getPostContext());
-		UserMsgDao dao=new UserMsgDaoImpl();
-		boolean b=dao.insertToUserPublish(userPublish);
-		if(b){
-			WebUtil.setResponse(response,BASE64.encryptBASE64("success".getBytes()));
-		}else {
-			WebUtil.setResponse(response,BASE64.encryptBASE64("error".getBytes()));
-		}
-	}
 
 
 
-	@RequestMapping("/makeWatch")
-	public void makeWatch(HttpServletRequest request,HttpServletResponse response) throws Exception {
-	    String watcher=(String)request.getParameter("userName");
-		String beWatcher=(String)request.getParameter("beWatcher");
-		UserRelationDao dao=new UserRelationDaoImpl();
-		String result=dao.watchSomeOne(watcher,beWatcher);
-		WebUtil.setResponse(response,BASE64.encryptBASE64(result.getBytes()));
-	}
 
-	@RequestMapping("/cleanWatch")
-	public void cleanWatch(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String watcher=(String)request.getParameter("userName");
-		String beWatcher=(String)request.getParameter("beWatcher");
-		UserRelationDao dao=new UserRelationDaoImpl();
-		String result=dao.unWatchSomeOne(watcher, beWatcher);
-		WebUtil.setResponse(response,BASE64.encryptBASE64(result.getBytes()));
-	}
-
-	@RequestMapping("/queryUser")
-	public void queryUser(HttpServletRequest request,HttpServletResponse response) throws Exception {
-		String userName=(String)request.getParameter("userName");
-		String num=(String)request.getParameter("num");
-		String str=new String();
-		UserDao user=new UserDao();
-		user.setUserName(userName);
-		user.setNum(Integer.parseInt(num)*20);
-		ApplicationContext context=new ClassPathXmlApplicationContext("springjdbc.xml");
-	    UserRelationDao userRelationDao=(UserRelationDaoImpl)context.getBean("userRelationDao");
-		List<WatcherInfo> list=userRelationDao.queryUser(user);
-		if(list.size()>0){
-			str=JsonPluginsUtil.beanListToJson(list);
-		} else {
-			str="isNull";
-		}
-		str=String.format("success%s",str);
-		//返回结果
-		WebUtil.setResponse(response,BASE64.encryptBASE64(str.getBytes("UTF-8")));
-		for (WatcherInfo dao:list){
-			System.out.println(dao.getNickName());
-		}
-
-	}
 }

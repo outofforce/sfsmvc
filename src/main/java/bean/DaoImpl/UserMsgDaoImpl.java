@@ -53,7 +53,13 @@ public class UserMsgDaoImpl implements UserMsgDao{
 			val+="&inActiVeDaTE";
 			inactiveDate=c.getTime();
 		}
-
+		if(!"".equals(publish.getToGroup())&&publish.getToGroup()!=null){
+			query+=",publish_type";
+			val+="&1";
+		}else if("".equals(publish.getToGroup())||publish.getToGroup()==null){
+			query+=",publish_type";
+			val+="&0";
+		}
 		String[] strs=val.split("&");
 		Object[] objects=new Object[strs.length];
 		for(int i=0;i<strs.length;i++){

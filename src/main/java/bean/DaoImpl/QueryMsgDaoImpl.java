@@ -1,6 +1,7 @@
 package bean.DaoImpl;
 
 import bean.Dao.QueryMsgDao;
+import bean.bean.MsgRelaBean;
 import bean.mybatisInterface.QueryMsg;
 
 import java.util.List;
@@ -24,7 +25,7 @@ public class QueryMsgDaoImpl implements QueryMsgDao {
 	}
 
 	@Override
-	public List getMsgList(String userId) {
-		return this.queryMsg.getMsg(userId);  //To change body of implemented methods use File | Settings | File Templates.
+	public List getMsgList(MsgRelaBean relaBean) {
+		return this.queryMsg.getMsg(relaBean);  //To change body of implemented methods use File | Settings | File Templates.
 	}
 }

@@ -25,7 +25,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/")
-public class InsertController {
+public class CompanyController {
 	public static CompanyInfoDao companyInfoDao=new CompanyInfoDaoImpl();
 	@RequestMapping("/insertCompanyInfo")
 	public void insertCompanyInfo(HttpServletRequest request,HttpServletResponse response) throws IOException {

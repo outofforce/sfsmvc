@@ -3,20 +3,28 @@
         <mapper namespace="bean.mybatisInterface.UserRelationInterface">
             <sql id="Select_clause">
                 SELECT
-                  user_name as userName,
-                  nick_name as nickName,
-                  head_img as headImg,
-                  id as id
-                  from User
+                  a.user_name as userName,
+                  a.nick_name as nickName,
+                  a.head_img as headImg,
+                  a.id as id
+                  from User a
             </sql>
 
             <select id="getUserRelationList" parameterType="bean.bean.UserDao" resultType="bean.bean.WatcherInfo">
                   <include refid="Select_clause"/>
                 <where>
-                    <if test="userName!=null">
-                        nick_name like '%'||#{userName}||'%'
+                    <if test="nickName!=null">
+                        a.nick_name like CONCAT('%','${nickName}','%')
                     </if>
                 </where>
                   limit #{num},20
+            </select>
+
+            <select id="getWatcherList"  parameterType="bean.bean.UserDao" resultType="bean.bean.WatcherInfo">
+                  <include refid="Select_clause"/>
+                  ,UserRelation b
+                  where b.user_id=#{id}
+                  and a.id=b.rela_user_id
+                  and b.status =1
             </select>
     </mapper>

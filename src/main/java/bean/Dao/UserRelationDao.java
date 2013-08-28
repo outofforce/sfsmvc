@@ -16,5 +16,5 @@ public interface UserRelationDao {
 	public String watchSomeOne(String watcher,String beWatcher);
 	public String unWatchSomeOne(String watcher,String beWatcher);
 	public List<WatcherInfo>queryUser(UserDao user);
-
+	public List<WatcherInfo>queryWatcher(UserDao user);
 }

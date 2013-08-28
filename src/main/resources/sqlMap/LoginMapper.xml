@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="bean.mybatisInterface.LoginInterface">
+        <select id="getUser" parameterType="bean.bean.UserDao" resultType="bean.bean.UserDao">
+               select
+               status,
+               nick_name as nickName,
+               head_img as headImg,
+               id
+               from User
+               where
+               user_name = #{userName}
+               and
+               passwd = #{passwd}
+        </select>
+</mapper>

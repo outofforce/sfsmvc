@@ -15,4 +15,5 @@ import java.util.List;
  */
 public interface UserRelationInterface {
 	public List<WatcherInfo> getUserRelationList(UserDao user);
+	public List<WatcherInfo> getWatcherList(UserDao user);
 }

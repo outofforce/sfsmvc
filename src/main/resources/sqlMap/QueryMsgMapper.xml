@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 <!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
         <mapper namespace="bean.mybatisInterface.QueryMsg">
-    <select id="getMsg" resultType="bean.bean.UserPublish">
+    <select id="getMsg" parameterType="bean.bean.MsgRelaBean" resultType="bean.bean.UserPublish">
 
          SELECT
                 *
@@ -24,9 +24,13 @@
                         UserPublish a,
                         USER b
                     WHERE
-                        a.user_id = b.id
+                    a.publish_type = 0
                     AND a.inactive_time IS NULL
                     OR a.inactive_time > SYSDATE()
+                    AND a.user_id = b.id
+                    <if test="watcherId!=null">
+                        AND a.user_id = #{watcherId}
+                    </if>
                     UNION
                         SELECT
                            a.context as postContext,
@@ -43,16 +47,20 @@
                             USER b,
                             UserMsgQueue d
                         WHERE
-                            a.user_id = b.id
+                        a.publish_type = 1
                         AND
-                        <![CDATA[
                         a.inactive_time > SYSDATE()
-                        ]]>
                         OR
                         a.inactive_time IS NULL
                         AND
                         a.id = d.publish_id
-
+                        AND a.user_id = b.id
+                        <if test="id!=null">
+                            AND d.user_id = #{id}
+                        </if>
+                        <if test="watcherId!=null">
+                            AND a.user_id = #{watcherId}
+                        </if>
                 <![CDATA[
                 )
                 ]]> c

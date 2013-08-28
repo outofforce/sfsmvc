@@ -23,5 +23,10 @@
     <bean id="userRelationDao" class="bean.DaoImpl.UserRelationDaoImpl">
         <property name="userRelationInterface" ref="userRelationInterface"></property>
     </bean>
-
+    <bean id="loginInterface" class="org.mybatis.spring.mapper.MapperFactoryBean"
+          p:mapperInterface="bean.mybatisInterface.LoginInterface"
+          p:sqlSessionFactory-ref="sqlSessionFactory"/>
+    <bean id="loginDao" class="bean.DaoImpl.LoginDaoImpl">
+        <property name="loginInterface"  ref="loginInterface"/>
+    </bean>
 </beans>
