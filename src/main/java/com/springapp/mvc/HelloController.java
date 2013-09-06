@@ -41,13 +41,8 @@ public class HelloController {
 	@Autowired
 	public MailSenderInfo mailSenderInfo;
 
-	@RequestMapping(method = RequestMethod.GET)
+	@RequestMapping("/welcome")
 	public String printWelcome(ModelMap model) {
-        String sql ="select * from project";
-		jdbcTemplate.execute(sql);
-
-        model.addAttribute("message", "Hello world!");
-
 		return "hello";
 	}
 
@@ -134,7 +129,10 @@ public class HelloController {
 	}
 
 
-
+	@RequestMapping("/download")
+	public String download(HttpServletRequest request,HttpServletResponse response){
+		return "download" ;
+	}
 
 
 }

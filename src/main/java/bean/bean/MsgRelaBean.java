@@ -8,15 +8,24 @@ package bean.bean;
  * To change this template use File | Settings | File Templates.
  */
 public class MsgRelaBean {
-	private String id;
+	private String userId;
 	private String watcherId;
+	private String publishId;
 
-	public String getId() {
-		return id;
+	public String getPublishId() {
+		return publishId;
 	}
 
-	public void setId(String id) {
-		this.id = id;
+	public void setPublishId(String publishId) {
+		this.publishId = publishId;
+	}
+
+	public String getUserId() {
+		return userId;
+	}
+
+	public void setUserId(String userId) {
+		this.userId = userId;
 	}
 
 	public String getWatcherId() {

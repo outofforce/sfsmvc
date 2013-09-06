@@ -9,6 +9,7 @@ import bean.bean.UserPublish;
 import common.BASE64;
 import common.JsonPluginsUtil;
 import common.WebUtil;
+import org.apache.commons.logging.Log;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
@@ -37,8 +38,6 @@ public class MsgController {
 	@RequestMapping("/queryPubdata")
 	public void bulletin(HttpServletRequest request,HttpServletResponse response) throws Exception {
 		MsgRelaBean relaBean= (MsgRelaBean) WebUtil.getBean(request, MsgRelaBean.class);
-		UserPublishDao publishDao=new UserPublishDao();
-		//List<UserPublish> publishList=publishDao.getPublishList();
 		ApplicationContext context=new ClassPathXmlApplicationContext("springjdbc.xml");
 		QueryMsgDao dao=(QueryMsgDao)context.getBean("queryMsgDao");
 		List publishList=dao.getMsgList(relaBean);

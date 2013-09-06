@@ -2,6 +2,7 @@ package bean.DaoImpl;
 
 import bean.Dao.RegisterDao;
 import bean.bean.UserDao;
+import bean.mybatisInterface.UserUpdateInterface;
 import common.WebUtil;
 import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.transaction.annotation.Isolation;
@@ -18,6 +19,8 @@ import java.util.Date;
  */
 @Transactional
 public class RegisterDaoImpl implements RegisterDao {
+
+
 	public static JdbcTemplate jdbcTemplate= WebUtil.getJdbcTemp();
 	@Transactional(isolation = Isolation.READ_COMMITTED)
 	public String setRegister(UserDao userDao){
@@ -55,5 +58,11 @@ public class RegisterDaoImpl implements RegisterDao {
 		}else {
 			return "reduplicate";
 		}
+	}
+
+	@Override
+	public void updateUserImg(UserDao userDao) {
+
+		//To change body of implemented methods use File | Settings | File Templates.
 	}
 }

@@ -28,10 +28,15 @@ public class WebUtil {
 	public static DriverManagerDataSource getDataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
 		dataSource.setDriverClassName("com.mysql.jdbc.Driver");
-		// dataSource.setUrl("jdbc:mysql://localhost:3306/mtldb");
-		dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/mtldb");
-		dataSource.setUsername("cat");
-		dataSource.setPassword("aopen7291");
+		dataSource.setUrl("jdbc:mysql://mtl.cdbsqfmi2y7b.ap-northeast-1.rds.amazonaws.com:3306/mtldb");
+		dataSource.setUsername("outofforce");
+		dataSource.setPassword("as1a1nf0");
+		//dataSource.setUrl("jdbc:mysql://localhost:3306/mtldb");
+		//dataSource.setUrl("jdbc:mysql://192.168.1.104:3306/mtldb");
+		//dataSource.setUsername("linym");
+		//dataSource.setUsername("cat");
+		//dataSource.setPassword("lym1985");
+		//dataSource.setPassword("aopen7291");
 		return dataSource;
 	}
 

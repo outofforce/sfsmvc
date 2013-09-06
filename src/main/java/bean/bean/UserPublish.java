@@ -7,19 +7,52 @@ package bean.bean;
  * Time: 下午3:31
  * To change this template use File | Settings | File Templates.
  */
-public class UserPublish extends BaseBean{
+public class UserPublish {
 	private String userId;
 	private String postImg;
 	private String postContext;
 	private String simpleImg;
 	private String gisInfo;
 	private String ttl_type;
-	private String create_time;
+	private String createTime;
 	private String userName;
 	private String nickName;
 	private String toGroup;
+	private String publishId;
+	private String headImg;
+
+	public String getHeadImg() {
+		return headImg;
+	}
+
+	public void setHeadImg(String headImg) {
+		this.headImg = headImg;
+	}
+
+
+
+
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	private int status;
+
+	public String getPublishId() {
+		return publishId;
+	}
+
+	public void setPublishId(String publishId) {
+		this.publishId = publishId;
+	}
 
 	public String getToGroup() {
+
 		return toGroup;
 	}
 
@@ -43,12 +76,12 @@ public class UserPublish extends BaseBean{
 		this.nickName = nickName;
 	}
 
-	public String getCreate_time() {
-		return create_time;
+	public String getCreateTime() {
+		return createTime;
 	}
 
-	public void setCreate_time(String create_time) {
-		this.create_time = create_time;
+	public void setCreateTime(String createTime) {
+		this.createTime = createTime;
 	}
 
 	public String getUserId() {

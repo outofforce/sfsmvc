@@ -11,6 +11,7 @@
             ]]>
 
                     SELECT
+                        a.id as publishId,
                         a.context as postContext,
                         a.context_img as postImg,
                         a.gis_info as gisInfo,
@@ -19,20 +20,23 @@
                         a.simple_img as simpleImg,
                         b.user_name as userName,
                         b.nick_name as nickName,
-                        a.create_time
+                        a.create_time as createTime,
+                        b.head_img as headImg
                     FROM
                         UserPublish a,
-                        USER b
+                        User b
                     WHERE
-                    a.publish_type = 0
-                    AND a.inactive_time IS NULL
-                    OR a.inactive_time > SYSDATE()
+                   ( a.inactive_time IS NULL
+                    OR a.inactive_time > SYSDATE()  )
                     AND a.user_id = b.id
+                    AND  a.publish_type = 0
+
                     <if test="watcherId!=null">
                         AND a.user_id = #{watcherId}
                     </if>
                     UNION
                         SELECT
+                           a.id as publishId,
                            a.context as postContext,
                            a.context_img as postImg,
                            a.gis_info as gisInfo,
@@ -41,22 +45,22 @@
                            a.simple_img as simpleImg,
                            b.user_name as userName,
                            b.nick_name as nickName,
-                           a.create_time
+                           a.create_time as createTime,
+                           b.head_img as headImg
                         FROM
                             UserPublish a,
-                            USER b,
+                            User b,
                             UserMsgQueue d
                         WHERE
-                        a.publish_type = 1
-                        AND
-                        a.inactive_time > SYSDATE()
+                       (a.inactive_time > SYSDATE()
                         OR
-                        a.inactive_time IS NULL
+                        a.inactive_time IS NULL  )
                         AND
                         a.id = d.publish_id
                         AND a.user_id = b.id
-                        <if test="id!=null">
-                            AND d.user_id = #{id}
+                        AND a.publish_type = 1
+                        <if test="userId!=null">
+                            AND d.user_id = #{userId}
                         </if>
                         <if test="watcherId!=null">
                             AND a.user_id = #{watcherId}
@@ -64,8 +68,14 @@
                 <![CDATA[
                 )
                 ]]> c
-            ORDER BY
-	c.create_time DESC
+        <where>
+            <if test="publishId!=null">
+                  publishId > #{publishId}
+            </if>
+        </where>
 
+            ORDER BY
+	c.createTime DESC
+        limit 0,20
     </select>
 </mapper>

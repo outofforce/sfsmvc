@@ -24,6 +24,8 @@
 		<url-pattern>*.do</url-pattern>
 	</servlet-mapping>
 
+
+
     <context-param>
         <param-name>log4jConfigLocation</param-name>
         <param-value>/WEB-INF/classes/log4j.properties</param-value>
